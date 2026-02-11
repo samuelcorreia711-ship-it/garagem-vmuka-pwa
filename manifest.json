@@ -1,0 +1,12 @@
+{
+  "background_color": "#ffffff",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "vmuka-car.vercel",
+  "orientation": "any",
+  "scope": "/",
+  "short_name": "vmuka-car.vercel",
+  "start_url": "/&lt;link rel=\"manifest\" href=\"manifest.json\"&gt; &lt;meta name=\"theme-color\" content=\"#c62828\"&gt;",
+  "theme_color": "#ffffff",
+  "lang": "pt"
+}
