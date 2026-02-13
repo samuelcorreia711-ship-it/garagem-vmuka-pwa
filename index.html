@@ -1,23 +1,38 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="theme-color" content="#000000"/>
+  <meta name="theme-color" content="#000000">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Garagem Vmuka-Car</title>
   <link rel="manifest" href="manifest.json">
 </head>
 
-<body style="font-family: Arial; text-align: center; background: #000; color: white; padding: 20px;">
+<body style="font-family: Arial; text-align: center; background: black; color: white;">
 
   <h1>Garagem Vmuka-Car</h1>
   <h3>Estética Automotiva</h3>
-
   <p>Agende seu serviço premium agora mesmo.</p>
 
-  <button style="padding: 15px; font-size: 18px; background: #1e90ff; color: white; border: none; border-radius: 8px;">
+  <button style="padding:15px; font-size:18px;">
     Agendar Serviço
   </button>
 
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", function () {
+        navigator.serviceWorker.register("/service-worker.js")
+          .then(function () {
+            console.log("Service Worker registrado!");
+          })
+          .catch(function (error) {
+            console.log("Erro:", error);
+          });
+      });
+    }
+  </script>
+
 </body>
 </html>
+
