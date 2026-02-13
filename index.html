@@ -1,74 +1,121 @@
 
-<!DOCTYPE html>
+<!<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Garagem Vmuka-Car</title>
 <link rel="manifest" href="manifest.json">
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #000;
+    color: white;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 400px;
+    margin: auto;
+    background: #111;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.5);
+}
+
+h1 {
+    text-align: center;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: none;
+    font-size: 14px;
+}
+
+button {
+    width: 100%;
+    padding: 14px;
+    margin-top: 10px;
+    border-radius: 8px;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: #0d6efd;
+    color: white;
+}
+
+.btn-whatsapp {
+    background: #25D366;
+    color: white;
+}
+</style>
 </head>
 
-<body style="font-family: Arial; text-align:center; background:black; color:white; padding:20px;">
+<body>
+
+<div class="container">
 
 <h1>Garagem Vmuka-Car</h1>
-<h3>Estética Automotiva</h3>
-<p>Agende seu serviço premium agora mesmo.</p>
+<p style="text-align:center;">Agende seu serviço premium 🚗✨</p>
 
-<button onclick="mostrarFormulario()" 
-style="padding:15px; font-size:18px; cursor:pointer;">
-Agendar Serviço
-</button>
+<input type="text" id="nome" placeholder="Seu nome completo">
 
-<div id="formulario" style="display:none; margin-top:20px;">
+<input type="tel" id="telefone" placeholder="Seu telefone">
 
-<input type="text" id="nome" placeholder="Seu nome" 
-style="padding:10px; margin:5px; width:80%;"><br>
+<input type="text" id="veiculo" placeholder="Modelo do veículo">
 
-<input type="tel" id="telefone" placeholder="Seu telefone" 
-style="padding:10px; margin:5px; width:80%;"><br>
+<select id="servico">
+<option value="">Selecione o serviço</option>
+<option>Lavagem Simples</option>
+<option>Lavagem Completa</option>
+<option>Polimento</option>
+<option>Vitrificação</option>
+<option>Higienização Interna</option>
+</select>
 
-<input type="text" id="veiculo" placeholder="Modelo do veículo" 
-style="padding:10px; margin:5px; width:80%;"><br>
+<input type="date" id="data">
+<input type="time" id="hora">
 
-<input type="text" id="servico" placeholder="Serviço desejado" 
-style="padding:10px; margin:5px; width:80%;"><br>
-
-<input type="date" id="data" 
-style="padding:10px; margin:5px; width:80%;"><br>
-
-<button onclick="enviarWhatsApp()" 
-style="padding:12px; font-size:16px; background:green; color:white; border:none; cursor:pointer;">
-Enviar Agendamento
+<button class="btn-whatsapp" onclick="enviarWhatsApp()">
+Confirmar Agendamento
 </button>
 
 </div>
 
 <script>
-
-function mostrarFormulario() {
-    document.getElementById("formulario").style.display = "block";
-}
-
 function enviarWhatsApp() {
+
     var nome = document.getElementById("nome").value;
     var telefone = document.getElementById("telefone").value;
     var veiculo = document.getElementById("veiculo").value;
     var servico = document.getElementById("servico").value;
     var data = document.getElementById("data").value;
+    var hora = document.getElementById("hora").value;
 
-    if(nome === "" || telefone === "" || veiculo === "" || servico === "" || data === ""){
+    if(nome === "" || telefone === "" || veiculo === "" || servico === "" || data === "" || hora === ""){
         alert("Preencha todos os campos!");
         return;
     }
 
-    var mensagem = "🚗 Novo Agendamento:%0A%0A" +
-                   "Nome: " + nome + "%0A" +
-                   "Telefone: " + telefone + "%0A" +
-                   "Veículo: " + veiculo + "%0A" +
-                   "Serviço: " + servico + "%0A" +
-                   "Data: " + data;
+    var mensagem = "🚗 *Novo Agendamento* %0A%0A" +
+                   "*Nome:* " + nome + "%0A" +
+                   "*Telefone:* " + telefone + "%0A" +
+                   "*Veículo:* " + veiculo + "%0A" +
+                   "*Serviço:* " + servico + "%0A" +
+                   "*Data:* " + data + "%0A" +
+                   "*Horário:* " + hora;
 
-    var numero = "5519991984539"; // 🔴 COLOQUE SEU NÚMERO AQUI
+    var numero = "5519991984539"; // COLOQUE SEU NÚMERO AQUI
 
     window.open("https://wa.me/" + numero + "?text=" + mensagem);
 }
@@ -78,11 +125,7 @@ if ("serviceWorker" in navigator) {
         navigator.serviceWorker.register("/service-worker.js");
     });
 }
-
 </script>
 
 </body>
 </html>
-
-
-
