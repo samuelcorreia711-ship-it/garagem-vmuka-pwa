@@ -1,5 +1,6 @@
 
-<!<!DOCTYPE html>
+
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -10,30 +11,31 @@
 <style>
 body {
     font-family: Arial, sans-serif;
-    background: #000;
+    background: #0a0a0a;
     color: white;
     margin: 0;
     padding: 20px;
 }
 
 .container {
-    max-width: 400px;
+    max-width: 420px;
     margin: auto;
-    background: #111;
+    background: #121212;
     padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    border-radius: 18px;
+    box-shadow: 0 0 20px rgba(13,110,253,0.3);
 }
 
 h1 {
     text-align: center;
+    color: #0d6efd;
 }
 
 input, select {
     width: 100%;
     padding: 12px;
     margin: 8px 0;
-    border-radius: 8px;
+    border-radius: 10px;
     border: none;
     font-size: 14px;
 }
@@ -41,22 +43,23 @@ input, select {
 button {
     width: 100%;
     padding: 14px;
-    margin-top: 10px;
-    border-radius: 8px;
+    margin-top: 12px;
+    border-radius: 10px;
     border: none;
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
 }
 
-.btn-primary {
+.btn-confirmar {
     background: #0d6efd;
     color: white;
 }
 
-.btn-whatsapp {
-    background: #25D366;
-    color: white;
+#preco {
+    font-weight: bold;
+    margin-top: 5px;
+    color: #25D366;
 }
 </style>
 </head>
@@ -69,53 +72,70 @@ button {
 <p style="text-align:center;">Agende seu serviço premium 🚗✨</p>
 
 <input type="text" id="nome" placeholder="Seu nome completo">
-
 <input type="tel" id="telefone" placeholder="Seu telefone">
-
 <input type="text" id="veiculo" placeholder="Modelo do veículo">
 
-<select id="servico">
+<select id="servico" onchange="mostrarPreco()">
 <option value="">Selecione o serviço</option>
-<option>Lavagem Simples</option>
-<option>Lavagem Completa</option>
-<option>Polimento</option>
-<option>Vitrificação</option>
-<option>Higienização Interna</option>
+<option value="50">Lavagem Simples - R$50</option>
+<option value="100">Lavagem Completa - R$100</option>
+<option value="250">Polimento - R$250</option>
+<option value="600">Vitrificação - R$600</option>
+<option value="150">Higienização Interna - R$150</option>
 </select>
 
-<input type="date" id="data">
-<input type="time" id="hora">
+<div id="preco"></div>
 
-<button class="btn-whatsapp" onclick="enviarWhatsApp()">
+<input type="date" id="data">
+<input type="time" id="hora" min="08:00" max="18:00">
+
+<button class="btn-confirmar" onclick="enviarWhatsApp()">
 Confirmar Agendamento
 </button>
 
 </div>
 
 <script>
+
+function mostrarPreco() {
+    var select = document.getElementById("servico");
+    var preco = select.value;
+    if(preco !== "") {
+        document.getElementById("preco").innerHTML = "Valor do serviço: R$" + preco;
+    } else {
+        document.getElementById("preco").innerHTML = "";
+    }
+}
+
 function enviarWhatsApp() {
 
     var nome = document.getElementById("nome").value;
     var telefone = document.getElementById("telefone").value;
     var veiculo = document.getElementById("veiculo").value;
-    var servico = document.getElementById("servico").value;
+    var servicoTexto = document.getElementById("servico").options[document.getElementById("servico").selectedIndex].text;
     var data = document.getElementById("data").value;
     var hora = document.getElementById("hora").value;
 
-    if(nome === "" || telefone === "" || veiculo === "" || servico === "" || data === "" || hora === ""){
+    if(nome === "" || telefone === "" || veiculo === "" || servicoTexto === "Selecione o serviço" || data === "" || hora === ""){
         alert("Preencha todos os campos!");
         return;
     }
 
-    var mensagem = "🚗 *Novo Agendamento* %0A%0A" +
+    var dia = new Date(data).getDay();
+    if(dia === 0){
+        alert("Não atendemos aos domingos!");
+        return;
+    }
+
+    var mensagem = "🚗 *Novo Agendamento - Vmuka-Car* %0A%0A" +
                    "*Nome:* " + nome + "%0A" +
                    "*Telefone:* " + telefone + "%0A" +
                    "*Veículo:* " + veiculo + "%0A" +
-                   "*Serviço:* " + servico + "%0A" +
+                   "*Serviço:* " + servicoTexto + "%0A" +
                    "*Data:* " + data + "%0A" +
                    "*Horário:* " + hora;
 
-    var numero = "5519991984539"; // COLOQUE SEU NÚMERO AQUI
+    var numero = "551991984539"; // COLOQUE SEU NÚMERO AQUI
 
     window.open("https://wa.me/" + numero + "?text=" + mensagem);
 }
@@ -125,6 +145,7 @@ if ("serviceWorker" in navigator) {
         navigator.serviceWorker.register("/service-worker.js");
     });
 }
+
 </script>
 
 </body>
