@@ -1,7 +1,5 @@
-
-
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,156 +7,128 @@
 <link rel="manifest" href="manifest.json">
 
 <style>
-.container {
-  max-width: 420px;
-  margin: auto;
-  background: rgba(0, 0, 0, 0.85);
-  padding: 20px;
-  border-radius: 18px;
-  box-shadow: 0 0 20px rgba(13,110,253,0.4);
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background: url("logo PGN.png") no-repeat center center fixed;
+  background-size: contain;
+  background-color: #0d1117;
+}
+
+/* Camada escura suave por cima da logo */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  z-index: -1;
 }
 
 .container {
   max-width: 420px;
-  margin: auto;
+  margin: 40px auto;
   background: rgba(0, 0, 0, 0.55);
-  backdrop-filter: blur(10px);
-  padding: 20px;
+  backdrop-filter: blur(12px);
+  padding: 25px;
   border-radius: 20px;
-  box-shadow: 0 0 25px rgba(13,110,253,0.5);
+  box-shadow: 0 0 30px rgba(0,150,255,0.5);
+  color: white;
 }
-  
+
 h1 {
   text-align: center;
-  color: #4cc9ff;
-  text-shadow: 0 0 10px rgba(76,201,255,0.8);
+  color: #4fc3ff;
+  font-size: 28px;
+  margin-bottom: 5px;
+  text-shadow: 0 0 15px rgba(79,195,255,0.8);
+}
 
-  
+.subtitle {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 14px;
+  color: #ccc;
 }
 
 input, select {
-    width: 100%;
-    padding: 12px;
-    margin: 8px 0;
-    border-radius: 10px;
-    border: none;
-    font-size: 14px;
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 15px;
+  border-radius: 12px;
+  border: none;
+  font-size: 14px;
+  background: rgba(255,255,255,0.1);
+  color: white;
+  outline: none;
+}
+
+input::placeholder {
+  color: #bbb;
 }
 
 button {
-    width: 100%;
-    padding: 14px;
-    margin-top: 12px;
-    border-radius: 10px;
-    border: none;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(45deg, #0096ff, #00c3ff);
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
-.btn-confirmar {
-    background: #0d6efd;
-    color: white;
+button:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 20px rgba(0,195,255,0.7);
 }
 
-#preco {
-    font-weight: bold;
-    margin-top: 5px;
-    color: #25D366;
-}
 </style>
 </head>
 
 <body>
 
 <div class="container">
+  <h1>Garagem Vmuka-Car</h1>
+  <div class="subtitle">Agende seu serviço premium 🚗✨</div>
 
-<h1>Garagem Vmuka-Car</h1>
-<p style="text-align:center;">Agende seu serviço premium 🚗✨</p>
+  <input type="text" placeholder="Seu nome completo">
+  <input type="tel" placeholder="Seu telefone">
+  <input type="text" placeholder="Modelo do veículo">
 
-<input type="text" id="nome" placeholder="Seu nome completo">
-<input type="tel" id="telefone" placeholder="Seu telefone">
-<input type="text" id="veiculo" placeholder="Modelo do veículo">
+  <select>
+    <option disabled selected>Selecione o serviço</option>
+    <option>Lavagem Simples</option>
+    <option>Lavagem Completa</option>
+    <option>Polimento</option>
+    <option>Vitrificação</option>
+    <option>Higienização Interna</option>
+  </select>
 
-<select id="servico" onchange="mostrarPreco()">
-<option value="">Selecione o serviço</option>
-<option value="80">Lavagem Simples Aparti-R$80</option>
-<option value="150">Lavagem Premium Aparti-R$150</option>
-<option value="450">Higienização Interna Aparti-R$450</option>
-<option value="500">Polimento Aparti-R$500</option>
-<option value="800">Vitrificação Aparti-R$800</option>
+  <select>
+    <option disabled selected>Selecione a data</option>
+    <option>Segunda-feira</option>
+    <option>Terça-feira</option>
+    <option>Quarta-feira</option>
+    <option>Quinta-feira</option>
+    <option>Sexta-feira</option>
+  </select>
 
-</select>
+  <select>
+    <option disabled selected>Selecione o horário</option>
+    <option>08:00</option>
+    <option>09:00</option>
+    <option>10:00</option>
+    <option>14:00</option>
+    <option>15:00</option>
+    <option>16:00</option>
+  </select>
 
-<div id="preco"></div>
-
-<input type="date" id="data">
-<input type="time" id="hora" min="08:00" max="18:00">
-
-<button class="btn-confirmar" onclick="enviarWhatsApp()">
-Confirmar Agendamento
-</button>
-
+  <button>Confirmar Agendamento</button>
 </div>
-
-<script>
-
-function mostrarPreco() {
-    var select = document.getElementById("servico");
-    var preco = select.value;
-    if(preco !== "") {
-        document.getElementById("preco").innerHTML = "Valor do serviço: R$" + preco;
-    } else {
-        document.getElementById("preco").innerHTML = "";
-    }
-}
-
-function enviarWhatsApp() {
-
-    var nome = document.getElementById("nome").value;
-    var telefone = document.getElementById("telefone").value;
-    var veiculo = document.getElementById("veiculo").value;
-    var servicoTexto = document.getElementById("servico").options[document.getElementById("servico").selectedIndex].text;
-    var data = document.getElementById("data").value;
-    var hora = document.getElementById("hora").value;
-
-    if(nome === "" || telefone === "" || veiculo === "" || servicoTexto === "Selecione o serviço" || data === "" || hora === ""){
-        alert("Preencha todos os campos!");
-        return;
-    }
-
-    var dia = new Date(data).getDay();
-    if(dia === 0){
-        alert("Não atendemos aos domingos!");
-        return;
-    }
-
-    var mensagem = "🚗 *Novo Agendamento - Vmuka-Car* %0A%0A" +
-                   "*Nome:* " + nome + "%0A" +
-                   "*Telefone:* " + telefone + "%0A" +
-                   "*Veículo:* " + veiculo + "%0A" +
-                   "*Serviço:* " + servicoTexto + "%0A" +
-                   "*Data:* " + data + "%0A" +
-                   "*Horário:* " + hora;
-
-    var numero = "551991984539"; // COLOQUE SEU NÚMERO AQUI
-
-    window.open("https://wa.me/" + numero + "?text=" + mensagem);
-}
-
-if ("serviceWorker" in navigator) {
-    window.addEventListener("load", function () {
-        navigator.serviceWorker.register("/service-worker.js");
-    });
-}
-
-</script>
 
 </body>
 </html>
-
-
-
-
-
-
