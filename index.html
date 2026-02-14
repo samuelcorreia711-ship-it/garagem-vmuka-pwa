@@ -1,54 +1,53 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Garagem Vmuka-Car</title>
-<link rel="manifest" href="manifest.json">
 
 <style>
 body {
   margin: 0;
-  padding: 0;
   font-family: Arial, sans-serif;
-
-  background: url("logo.png") no-repeat center center fixed;
-  background-size: 90%;
-  background-color: #0d1117;
+  background: linear-gradient(180deg, #0d1117, #000);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
 }
 
-/* Escurecimento mais leve */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.45);
-  z-index: -1;
-}
 .container {
+  width: 90%;
   max-width: 420px;
-  margin: 80px auto;
-  background: rgba(0, 0, 0, 0.35);
-  backdrop-filter: blur(8px);
-  padding: 25px;
-  border-radius: 20px;
-  box-shadow: 0 0 40px rgba(0,150,255,0.4);
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(12px);
+  padding: 30px;
+  border-radius: 25px;
+  box-shadow: 0 0 40px rgba(0, 150, 255, 0.4);
   color: white;
+}
+
+.logo {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.logo img {
+  width: 170px;
+  filter: drop-shadow(0 0 20px #00bfff);
 }
 
 h1 {
   text-align: center;
-  color: #4fc3ff;
-  font-size: 28px;
+  color: #00bfff;
   margin-bottom: 5px;
-  text-shadow: 0 0 15px rgba(79,195,255,0.8);
 }
 
-.subtitle {
+.sub {
   text-align: center;
-  margin-bottom: 20px;
-  font-size: 14px;
   color: #ccc;
+  margin-bottom: 25px;
+  font-size: 14px;
 }
 
 input, select {
@@ -57,24 +56,19 @@ input, select {
   margin-bottom: 15px;
   border-radius: 12px;
   border: none;
-  font-size: 14px;
-  background: rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.08);
   color: white;
-  outline: none;
-}
-
-input::placeholder {
-  color: #bbb;
+  font-size: 15px;
 }
 
 button {
   width: 100%;
   padding: 15px;
   border: none;
-  border-radius: 14px;
-  background: linear-gradient(45deg, #0096ff, #00c3ff);
+  border-radius: 15px;
+  background: linear-gradient(90deg, #007bff, #00c6ff);
   color: white;
-  font-size: 16px;
+  font-size: 17px;
   font-weight: bold;
   cursor: pointer;
   transition: 0.3s;
@@ -82,55 +76,110 @@ button {
 
 button:hover {
   transform: scale(1.03);
-  box-shadow: 0 0 20px rgba(0,195,255,0.7);
+  box-shadow: 0 0 25px #00bfff;
 }
 
+.resumo {
+  margin-top: 15px;
+  background: rgba(0,150,255,0.15);
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  display: none;
+}
 </style>
 </head>
 
 <body>
 
 <div class="container">
-  <h1>Garagem Vmuka-Car</h1>
-  <div class="subtitle">Agende seu serviço premium 🚗✨</div>
 
-  <input type="text" placeholder="Seu nome completo">
-  <input type="tel" placeholder="Seu telefone">
-  <input type="text" placeholder="Modelo do veículo">
-
-  <select>
-    <option disabled selected>Selecione o serviço</option>
-    <option>Lavagem Simples</option>
-    <option>Lavagem Completa</option>
-    <option>Polimento</option>
-    <option>Vitrificação</option>
-    <option>Higienização Interna</option>
-  </select>
-
-  <select>
-    <option disabled selected>Selecione a data</option>
-    <option>Segunda-feira</option>
-    <option>Terça-feira</option>
-    <option>Quarta-feira</option>
-    <option>Quinta-feira</option>
-    <option>Sexta-feira</option>
-  </select>
-
-  <select>
-    <option disabled selected>Selecione o horário</option>
-    <option>08:00</option>
-    <option>09:00</option>
-    <option>10:00</option>
-    <option>14:00</option>
-    <option>15:00</option>
-    <option>16:00</option>
-  </select>
-
-  <button>Confirmar Agendamento</button>
+<div class="logo">
+  <img src="logo PGN.png" alt="Logo">
 </div>
+
+<h1>Garagem Vmuka-Car</h1>
+<p class="sub">Atendimento de Segunda a Sábado até 18:00 🚗✨</p>
+
+<input type="text" id="nome" placeholder="Seu nome completo">
+<input type="tel" id="telefone" placeholder="Seu telefone">
+<input type="text" id="veiculo" placeholder="Modelo do veículo">
+
+<select id="servico">
+  <option value="">Selecione o serviço</option>
+  <option value="Lavagem Simples - R$90">Lavagem Simples - R$50</option>
+  <option value="Lavagem Premium - R$170">Lavagem Premium - R$90</option>
+  <option value="Polimento - R$800">Polimento - R$250</option>
+  <option value="Vitrificação - R$600">Vitrificação - R$600</option>
+  <option value="Higienização Interna - R$150">Higienização Interna - R$150</option>
+</select>
+
+<select id="dia">
+  <option value="">Selecione o dia</option>
+  <option>Segunda-feira</option>
+  <option>Terça-feira</option>
+  <option>Quarta-feira</option>
+  <option>Quinta-feira</option>
+  <option>Sexta-feira</option>
+  <option>Sábado</option>
+</select>
+
+<select id="horario">
+  <option value="">Selecione o horário</option>
+  <option>08:00</option>
+  <option>09:00</option>
+  <option>10:00</option>
+  <option>11:00</option>
+  <option>13:00</option>
+  <option>14:00</option>
+  <option>15:00</option>
+  <option>16:00</option>
+  <option>17:00</option>
+  <option>18:00</option>
+</select>
+
+<button onclick="confirmar()">Confirmar Agendamento</button>
+
+<div class="resumo" id="resumo"></div>
+
+</div>
+
+<script>
+<script>
+function confirmar() {
+  const nome = document.getElementById("nome").value;
+  const telefone = document.getElementById("telefone").value;
+  const veiculo = document.getElementById("veiculo").value;
+  const servico = document.getElementById("servico").value;
+  const dia = document.getElementById("dia").value;
+  const horario = document.getElementById("horario").value;
+
+  if (!nome || !telefone || !veiculo || !servico || !dia || !horario) {
+    alert("Preencha todos os campos!");
+    return;
+  }
+
+  const mensagem = 
+`🚗 *Novo Agendamento - Garagem Vmuka-Car* 🚗
+
+👤 Cliente: ${nome}
+📞 Telefone: ${telefone}
+🚘 Veículo: ${veiculo}
+
+🧼 Serviço: ${servico}
+📅 Dia: ${dia}
+⏰ Horário: ${horario}
+
+Aguardando confirmação!`;
+
+  const numero = "5599999999999"; // COLOQUE SEU NÚMERO AQUI
+  const url = "https://wa.me/" + numero + "?text=" + encodeURIComponent(mensagem);
+
+  window.open(url, "_blank");
+}
+</script>
+
+</script>
 
 </body>
 </html>
-
-
-
