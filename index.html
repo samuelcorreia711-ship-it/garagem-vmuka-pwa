@@ -7,24 +7,24 @@
 
 <style>
 body {
+  body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: linear-gradient(180deg, #0d1117, #000);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-}
-
-.container {
-  width: 90%;
-  max-width: 420px;
-  background: rgba(0, 0, 0, 0.65);
-  backdrop-filter: blur(12px);
-  padding: 30px;
-  border-radius: 25px;
-  box-shadow: 0 0 40px rgba(0, 150, 255, 0.4);
+  background: url("logo.png") no-repeat center center fixed;
+  background-size: 400px;
+  background-color: #000;
   color: white;
+}
+  .container {
+  max-width: 420px;
+  margin: 40px auto;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(12px);
+  padding: 25px;
+  border-radius: 25px;
+  box-shadow: 0 0 40px rgba(0, 200, 255, 0.4);
+  }
+  
 }
 
 .logo {
@@ -142,11 +142,9 @@ button:hover {
 
 <div class="resumo" id="resumo"></div>
 
-</div>
 
 <script>
-<script>
-function confirmar() {
+function confirmar enviarWhatsapp() {
   const nome = document.getElementById("nome").value;
   const telefone = document.getElementById("telefone").value;
   const veiculo = document.getElementById("veiculo").value;
@@ -183,4 +181,5 @@ Aguardando confirmação!`;
 
 </body>
 </html>
+
 
