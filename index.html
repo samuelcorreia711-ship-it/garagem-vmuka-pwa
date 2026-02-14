@@ -7,33 +7,32 @@
 <link rel="manifest" href="manifest.json">
 
 <style>
-
 body {
   margin: 0;
   padding: 0;
   font-family: Arial, sans-serif;
+
   background: url("logo.png") no-repeat center center fixed;
-  background-size: contain;
+  background-size: 60%;
   background-color: #0d1117;
 }
 
-/* Camada escura suave por cima da logo */
+/* Escurecimento mais leve */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.65);
+  background: rgba(0,0,0,0.45);
   z-index: -1;
 }
-
 .container {
   max-width: 420px;
-  margin: 40px auto;
-  background: rgba(0, 0, 0, 0.55);
-  backdrop-filter: blur(12px);
+  margin: 80px auto;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(8px);
   padding: 25px;
   border-radius: 20px;
-  box-shadow: 0 0 30px rgba(0,150,255,0.5);
+  box-shadow: 0 0 40px rgba(0,150,255,0.4);
   color: white;
 }
 
@@ -132,4 +131,5 @@ button:hover {
 
 </body>
 </html>
+
 
