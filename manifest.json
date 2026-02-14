@@ -1,20 +1,13 @@
 {
-  "name": "Garagem Vmuka-Car Estética Automotiva",
+  "name": "Vmuka-Car Agendamento",
   "short_name": "Vmuka-Car",
-  "description": "Agendamento de serviços da Garagem Vmuka-Car",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#000000",
-  "theme_color": "#0d6efd",
-  "orientation": "portrait",
+  "theme_color": "#00bfff",
   "icons": [
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/743/743007.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "https://cdn-icons-png.flaticon.com/512/743/743007.png",
+      "src": "/icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
