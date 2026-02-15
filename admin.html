@@ -61,7 +61,38 @@ function carregar() {
       </div>
     `;
   });
+}function gerarLinkGoogle(dia, horario, nome){
+
+  const dataBase = new Date();
+  const diasSemana = {
+    "Segunda-feira":1,
+    "Terça-feira":2,
+    "Quarta-feira":3,
+    "Quinta-feira":4,
+    "Sexta-feira":5,
+    "Sábado":6
+  };
+
+  const hoje = dataBase.getDay();
+  const alvo = diasSemana[dia];
+
+  let diff = alvo - hoje;
+  if(diff < 0) diff += 7;
+
+  dataBase.setDate(dataBase.getDate()+diff);
+
+  const [hora, minuto] = horario.split(":");
+
+  dataBase.setHours(hora);
+  dataBase.setMinutes(minuto);
+
+  const inicio = dataBase.toISOString().replace(/-|:|\.\d+/g,"");
+  dataBase.setHours(dataBase.getHours()+2);
+  const fim = dataBase.toISOString().replace(/-|:|\.\d+/g,"");
+
+  return `https://www.google.com/calendar/render?action=TEMPLATE&text=Agendamento Vmuka-Car - ${nome}&dates=${inicio}/${fim}&details=Serviço agendado via app&sf=true&output=xml`;
 }
+
 
 function liberar(index){
   let agendamentos = JSON.parse(localStorage.getItem("agendamentos")) || [];
