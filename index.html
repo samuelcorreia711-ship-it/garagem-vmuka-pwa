@@ -160,6 +160,7 @@ button.loading {
 </div>
 
 <script>
+  <script>
 
 const precos = {
   "Lavagem Simples": 40,
@@ -180,6 +181,8 @@ document.querySelectorAll("#servicos input").forEach(cb => {
   cb.addEventListener("change", calcularTotal);
 });
 
+document.getElementById("dia").addEventListener("change", bloquearHorarios);
+
 function calcularTotal() {
 
   const tamanho = document.getElementById("tamanho").value;
@@ -197,6 +200,28 @@ function calcularTotal() {
 
   document.getElementById("totalValor").innerText =
     "Total: R$" + total.toFixed(2);
+}
+
+function bloquearHorarios() {
+
+  const diaSelecionado = document.getElementById("dia").value;
+  const horarios = document.getElementById("horario").options;
+
+  const agendamentos = JSON.parse(localStorage.getItem("agendamentos")) || [];
+
+  for (let i = 0; i < horarios.length; i++) {
+    horarios[i].disabled = false;
+  }
+
+  agendamentos.forEach(ag => {
+    if (ag.dia === diaSelecionado) {
+      for (let i = 0; i < horarios.length; i++) {
+        if (horarios[i].value === ag.horario) {
+          horarios[i].disabled = true;
+        }
+      }
+    }
+  });
 }
 
 function enviarWhatsApp() {
@@ -249,6 +274,8 @@ function enviarWhatsApp() {
 
   localStorage.setItem("agendamentos", JSON.stringify(agendamentos));
 
+  bloquearHorarios();
+
   const mensagem =
 `🚗 NOVO AGENDAMENTO 🚗
 
@@ -276,7 +303,9 @@ Horário: ${horario}`;
   }, 800);
 }
 
-</script>
+window.onload = bloquearHorarios;
 
-</body>
-</html>
+</script>
+  
+
+  
