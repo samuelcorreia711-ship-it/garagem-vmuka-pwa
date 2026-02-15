@@ -1,122 +1,83 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Painel Administrativo - Vmuka-Car</title>
-
+<title>Painel Admin - Vmuka</title>
 <style>
-body {
-  font-family: Arial, sans-serif;
-  background: #000;
-  color: white;
-  margin: 0;
-  padding: 20px;
+body{
+  font-family: Arial;
+  background:#111;
+  color:white;
+  padding:20px;
 }
-
-.login-box, .admin-box {
-  max-width: 500px;
-  margin: auto;
-  background: #111;
-  padding: 25px;
-  border-radius: 15px;
-  box-shadow: 0 0 20px rgba(0,200,255,0.4);
+.card{
+  background:#222;
+  padding:15px;
+  margin-bottom:15px;
+  border-radius:10px;
 }
-
-h2 {
-  text-align: center;
-  color: #00cfff;
+button{
+  padding:8px 12px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  margin-top:10px;
 }
-
-input {
-  width: 100%;
-  padding: 12px;
-  margin: 10px 0;
-  border-radius: 10px;
-  border: none;
+.liberar{
+  background:#00cfff;
 }
-
-button {
-  width: 100%;
-  padding: 12px;
-  background: #00cfff;
-  border: none;
-  border-radius: 10px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.agendamento {
-  background: #1a1a1a;
-  padding: 15px;
-  margin: 10px 0;
-  border-radius: 10px;
+.limpar{
+  background:red;
+  color:white;
 }
 </style>
 </head>
 
 <body>
 
-<div class="login-box" id="login">
-  <h2>🔐 Painel Vmuka-Car</h2>
-  <input type="password" id="senha" placeholder="Digite a senha">
-  <button onclick="logar()">Entrar</button>
-</div>
+<h2>💎 Painel Administrativo</h2>
 
-<div class="admin-box" id="admin" style="display:none;">
-  <h2>📅 Agendamentos</h2>
-  <div id="lista"></div>
-</div>
+<div id="lista"></div>
+
+<button class="limpar" onclick="limparTudo()">Limpar Todos Agendamentos</button>
 
 <script>
 
-const SENHA_CORRETA = "1234"; // você pode mudar depois
-
-function logar() {
-  const senha = document.getElementById("senha").value;
-
-  if (senha === SENHA_CORRETA) {
-    document.getElementById("login").style.display = "none";
-    document.getElementById("admin").style.display = "block";
-    carregarAgendamentos();
-  } else {
-    alert("Senha incorreta");
-  }
-}
-
-function carregarAgendamentos() {
-  const lista = document.getElementById("lista");
-  lista.innerHTML = "";
-
+function carregar() {
+  const listaDiv = document.getElementById("lista");
   const agendamentos = JSON.parse(localStorage.getItem("agendamentos")) || [];
 
-  if (agendamentos.length === 0) {
-    lista.innerHTML = "<p>Nenhum agendamento encontrado.</p>";
-    return;
-  }
+  listaDiv.innerHTML = "";
 
   agendamentos.forEach((ag, index) => {
-    lista.innerHTML += `
-      <div class="agendamento">
-        <strong>${ag.nome}</strong><br>
-        ${ag.veiculo}<br>
-        ${ag.servicos}<br>
-        ${ag.dia} às ${ag.horario}<br><br>
-        <button onclick="excluir(${index})">Excluir</button>
+
+    listaDiv.innerHTML += `
+      <div class="card">
+        <b>${ag.nome}</b><br>
+        ${ag.dia} - ${ag.horario}<br>
+        <button class="liberar" onclick="liberar(${index})">
+          Liberar Horário
+        </button>
       </div>
     `;
   });
 }
 
-function excluir(index) {
+function liberar(index){
   let agendamentos = JSON.parse(localStorage.getItem("agendamentos")) || [];
-  agendamentos.splice(index, 1);
+  agendamentos.splice(index,1);
   localStorage.setItem("agendamentos", JSON.stringify(agendamentos));
-  carregarAgendamentos();
+  carregar();
 }
+
+function limparTudo(){
+  localStorage.removeItem("agendamentos");
+  carregar();
+}
+
+carregar();
 
 </script>
 
 </body>
 </html>
-
