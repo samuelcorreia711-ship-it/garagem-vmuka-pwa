@@ -1,1 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel Administrativo - Vmuka-Car</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #000;
+  color: white;
+  margin: 0;
+  padding: 20px;
+}
+
+.login-box, .admin-box {
+  max-width: 500px;
+  margin: auto;
+  background: #111;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(0,200,255,0.4);
+}
+
+h2 {
+  text-align: center;
+  color: #00cfff;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 10px;
+  border: none;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background: #00cfff;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.agendamento {
+  background: #1a1a1a;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="login-box" id="login">
+  <h2>🔐 Painel Vmuka-Car</h2>
+  <input type="password" id="senha" placeholder="Digite a senha">
+  <button onclick="logar()">Entrar</button>
+</div>
+
+<div class="admin-box" id="admin" style="display:none;">
+  <h2>📅 Agendamentos</h2>
+  <div id="lista"></div>
+</div>
+
+<script>
+
+const SENHA_CORRETA = "1234"; // você pode mudar depois
+
+function logar() {
+  const senha = document.getElementById("senha").value;
+
+  if (senha === SENHA_CORRETA) {
+    document.getElementById("login").style.display = "none";
+    document.getElementById("admin").style.display = "block";
+    carregarAgendamentos();
+  } else {
+    alert("Senha incorreta");
+  }
+}
+
+function carregarAgendamentos() {
+  const lista = document.getElementById("lista");
+  lista.innerHTML = "";
+
+  const agendamentos = JSON.parse(localStorage.getItem("agendamentos")) || [];
+
+  if (agendamentos.length === 0) {
+    lista.innerHTML = "<p>Nenhum agendamento encontrado.</p>";
+    return;
+  }
+
+  agendamentos.forEach((ag, index) => {
+    lista.innerHTML += `
+      <div class="agendamento">
+        <strong>${ag.nome}</strong><br>
+        ${ag.veiculo}<br>
+        ${ag.servicos}<br>
+        ${ag.dia} às ${ag.horario}<br><br>
+        <button onclick="excluir(${index})">Excluir</button>
+      </div>
+    `;
+  });
+}
+
+function excluir(index) {
+  let agendamentos = JSON.parse(localStorage.getItem("agendamentos")) || [];
+  agendamentos.splice(index, 1);
+  localStorage.setItem("agendamentos", JSON.stringify(agendamentos));
+  carregarAgendamentos();
+}
+
+</script>
+
+</body>
+</html>
 
