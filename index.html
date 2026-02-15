@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+      <!DOCTYPE html>
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
@@ -75,6 +75,21 @@ button.loading {
   opacity: 0.6;
   pointer-events: none;
 }
+
+.servico-box {
+  background: rgba(255,255,255,0.1);
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+#totalValor {
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 15px;
+  color: #00ffcc;
+}
 </style>
 </head>
 
@@ -89,15 +104,33 @@ button.loading {
 <input type="tel" id="telefone" placeholder="Seu telefone">
 <input type="text" id="veiculo" placeholder="Modelo do veículo">
 
-<label>Escolha o serviço:</label>
-<select id="servico" onchange="mostrarDetalhes()">
-  <option value="">Selecione</option>
-  <option value="lavagem">Lavagem</option>
-  <option value="polimento">Polimento</option>
-  <option value="higienizacao">Higienização Interna</option>
+<select id="tamanho">
+<option value="">Tamanho do veículo</option>
+<option>Pequeno</option>
+<option>Médio</option>
+<option>Grande</option>
 </select>
 
-<div id="detalhesServico"></div>
+<div id="servicos">
+
+<div class="servico-box">
+<label><input type="checkbox" value="Lavagem Simples"> Lavagem Simples</label><br>
+<label><input type="checkbox" value="Lavagem Premium"> Lavagem Premium</label>
+</div>
+
+<div class="servico-box">
+<label><input type="checkbox" value="Polimento Técnico"> Polimento Técnico</label><br>
+<label><input type="checkbox" value="Polimento + Vitrificação"> Polimento + Vitrificação</label>
+</div>
+
+<div class="servico-box">
+<label><input type="checkbox" value="Higienização Bancos"> Higienização Bancos</label><br>
+<label><input type="checkbox" value="Higienização Completa"> Higienização Completa</label>
+</div>
+
+</div>
+
+<div id="totalValor">Total: R$0.00</div>
 
 <select id="dia">
 <option value="">Selecione o dia</option>
@@ -127,7 +160,7 @@ button.loading {
 
 </div>
 
-<<script>
+<script>
 
 const precosBase = {
   "Lavagem Simples": 40,
@@ -144,38 +177,33 @@ const multiplicadorTamanho = {
   "Grande": 1.5
 };
 
-const checkboxes = document.querySelectorAll("#servicos input[type='checkbox']");
-checkboxes.forEach(cb => cb.addEventListener("change", calcularTotal));
+document.querySelectorAll("#servicos input").forEach(cb => {
+  cb.addEventListener("change", calcularTotal);
+});
 
-document.getElementById("tamanho")?.addEventListener("change", calcularTotal);
+document.getElementById("tamanho").addEventListener("change", calcularTotal);
 
 function calcularTotal() {
   const tamanho = document.getElementById("tamanho").value;
   let total = 0;
 
-  const selecionados = document.querySelectorAll("#servicos input[type='checkbox']:checked");
+  const selecionados = document.querySelectorAll("#servicos input:checked");
 
   selecionados.forEach(item => {
-    const nomeServico = item.value.split("-")[0].trim();
-    const precoBase = precosBase[nomeServico];
+    const precoBase = precosBase[item.value];
     const multiplicador = multiplicadorTamanho[tamanho] || 1;
-
     total += precoBase * multiplicador;
   });
 
   if (selecionados.length >= 2) {
-    total = total * 0.95; // 5% desconto
+    total = total * 0.95;
   }
 
-  document.getElementById("totalValor").innerText = 
+  document.getElementById("totalValor").innerText =
     "Total: R$" + total.toFixed(2);
 }
 
 function enviarWhatsApp() {
-
-  const botao = document.getElementById("btnAgendar");
-  botao.classList.add("loading");
-  botao.innerText = "Enviando...";
 
   const nome = document.getElementById("nome").value;
   const telefone = document.getElementById("telefone").value;
@@ -184,12 +212,10 @@ function enviarWhatsApp() {
   const dia = document.getElementById("dia").value;
   const horario = document.getElementById("horario").value;
 
-  const selecionados = document.querySelectorAll("#servicos input[type='checkbox']:checked");
+  const selecionados = document.querySelectorAll("#servicos input:checked");
 
   if (!nome || !telefone || !veiculo || !tamanho || selecionados.length === 0 || !dia || !horario) {
     alert("Preencha todos os campos");
-    botao.classList.remove("loading");
-    botao.innerText = "Confirmar Agendamento";
     return;
   }
 
@@ -197,14 +223,11 @@ function enviarWhatsApp() {
   let total = 0;
 
   selecionados.forEach(item => {
-    const nomeServico = item.value.split("-")[0].trim();
-    const precoBase = precosBase[nomeServico];
+    const precoBase = precosBase[item.value];
     const multiplicador = multiplicadorTamanho[tamanho];
-
     const precoFinal = precoBase * multiplicador;
     total += precoFinal;
-
-    listaServicos += `- ${nomeServico} (R$${precoFinal.toFixed(2)})\n`;
+    listaServicos += `- ${item.value}\n`;
   });
 
   let desconto = 0;
@@ -233,11 +256,10 @@ Horário: ${horario}`;
   const numero = "5519991984539";
   const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`;
 
-  setTimeout(() => {
-    window.open(url, "_blank");
-    botao.classList.remove("loading");
-    botao.innerText = "Confirmar Agendamento";
-  }, 800);
+  window.open(url, "_blank");
 }
 
 </script>
+
+</body>
+</html>
