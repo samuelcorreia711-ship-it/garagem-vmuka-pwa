@@ -1,4 +1,4 @@
-      <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
@@ -15,7 +15,7 @@ body {
   margin: 0;
   font-family: Arial, sans-serif;
   background: url("logo.png") no-repeat center center fixed;
-  background-size: 650px;
+  background-size: 600px;
   background-color: #000;
   color: white;
 }
@@ -24,7 +24,7 @@ body::before {
   content: "";
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.45);
+  background: rgba(0,0,0,0.5);
   z-index: -1;
 }
 
@@ -32,7 +32,6 @@ body::before {
   max-width: 420px;
   margin: 40px auto;
   background: rgba(0,0,0,0.6);
-  backdrop-filter: blur(5px);
   padding: 25px;
   border-radius: 25px;
   box-shadow: 0 0 30px rgba(0,200,255,0.5);
@@ -59,6 +58,26 @@ input, select {
   color: white;
 }
 
+.servicos {
+  background: rgba(255,255,255,0.05);
+  padding: 15px;
+  border-radius: 15px;
+  margin-top: 10px;
+}
+
+.servicos label {
+  display: block;
+  margin: 8px 0;
+}
+
+.total {
+  margin-top: 15px;
+  font-size: 18px;
+  color: #00ffcc;
+  font-weight: bold;
+  text-align: center;
+}
+
 button {
   width: 100%;
   padding: 14px;
@@ -75,21 +94,6 @@ button.loading {
   opacity: 0.6;
   pointer-events: none;
 }
-
-.servico-box {
-  background: rgba(255,255,255,0.1);
-  padding: 10px;
-  border-radius: 10px;
-  margin-bottom: 10px;
-}
-
-#totalValor {
-  font-size: 18px;
-  font-weight: bold;
-  text-align: center;
-  margin-top: 15px;
-  color: #00ffcc;
-}
 </style>
 </head>
 
@@ -104,33 +108,28 @@ button.loading {
 <input type="tel" id="telefone" placeholder="Seu telefone">
 <input type="text" id="veiculo" placeholder="Modelo do veículo">
 
-<select id="tamanho">
-<option value="">Tamanho do veículo</option>
-<option>Pequeno</option>
-<option>Médio</option>
-<option>Grande</option>
+<label>Tamanho do Veículo:</label>
+<select id="tamanho" onchange="calcularTotal()">
+  <option value="">Selecione</option>
+  <option value="Pequeno">Pequeno</option>
+  <option value="Médio">Médio</option>
+  <option value="Grande">Grande</option>
 </select>
 
-<div id="servicos">
+<div class="servicos" id="servicos">
 
-<div class="servico-box">
-<label><input type="checkbox" value="Lavagem Simples"> Lavagem Simples</label><br>
-<label><input type="checkbox" value="Lavagem Premium"> Lavagem Premium</label>
-</div>
+<strong>Escolha os Serviços:</strong>
 
-<div class="servico-box">
-<label><input type="checkbox" value="Polimento Técnico"> Polimento Técnico</label><br>
-<label><input type="checkbox" value="Polimento + Vitrificação"> Polimento + Vitrificação</label>
-</div>
-
-<div class="servico-box">
-<label><input type="checkbox" value="Higienização Bancos"> Higienização Bancos</label><br>
-<label><input type="checkbox" value="Higienização Completa"> Higienização Completa</label>
-</div>
+<label><input type="checkbox" value="Lavagem Simples"> Lavagem Simples - R$40</label>
+<label><input type="checkbox" value="Lavagem Premium"> Lavagem Premium - R$80</label>
+<label><input type="checkbox" value="Polimento Técnico"> Polimento Técnico - R$350</label>
+<label><input type="checkbox" value="Polimento + Vitrificação"> Polimento + Vitrificação - R$900</label>
+<label><input type="checkbox" value="Higienização Bancos"> Higienização Bancos - R$150</label>
+<label><input type="checkbox" value="Higienização Completa"> Higienização Completa - R$300</label>
 
 </div>
 
-<div id="totalValor">Total: R$0.00</div>
+<div class="total" id="totalValor">Total: R$0,00</div>
 
 <select id="dia">
 <option value="">Selecione o dia</option>
@@ -162,7 +161,7 @@ button.loading {
 
 <script>
 
-const precosBase = {
+const precos = {
   "Lavagem Simples": 40,
   "Lavagem Premium": 80,
   "Polimento Técnico": 350,
@@ -171,7 +170,7 @@ const precosBase = {
   "Higienização Completa": 300
 };
 
-const multiplicadorTamanho = {
+const multiplicador = {
   "Pequeno": 1,
   "Médio": 1.25,
   "Grande": 1.5
@@ -181,22 +180,19 @@ document.querySelectorAll("#servicos input").forEach(cb => {
   cb.addEventListener("change", calcularTotal);
 });
 
-document.getElementById("tamanho").addEventListener("change", calcularTotal);
-
 function calcularTotal() {
-  const tamanho = document.getElementById("tamanho").value;
-  let total = 0;
 
+  const tamanho = document.getElementById("tamanho").value;
   const selecionados = document.querySelectorAll("#servicos input:checked");
 
+  let total = 0;
+
   selecionados.forEach(item => {
-    const precoBase = precosBase[item.value];
-    const multiplicador = multiplicadorTamanho[tamanho] || 1;
-    total += precoBase * multiplicador;
+    total += precos[item.value] * (multiplicador[tamanho] || 1);
   });
 
   if (selecionados.length >= 2) {
-    total = total * 0.95;
+    total *= 0.95;
   }
 
   document.getElementById("totalValor").innerText =
@@ -204,6 +200,10 @@ function calcularTotal() {
 }
 
 function enviarWhatsApp() {
+
+  const botao = document.getElementById("btnAgendar");
+  botao.classList.add("loading");
+  botao.innerText = "Enviando...";
 
   const nome = document.getElementById("nome").value;
   const telefone = document.getElementById("telefone").value;
@@ -216,25 +216,38 @@ function enviarWhatsApp() {
 
   if (!nome || !telefone || !veiculo || !tamanho || selecionados.length === 0 || !dia || !horario) {
     alert("Preencha todos os campos");
+    botao.classList.remove("loading");
+    botao.innerText = "Confirmar Agendamento";
     return;
   }
 
-  let listaServicos = "";
+  let lista = "";
   let total = 0;
 
   selecionados.forEach(item => {
-    const precoBase = precosBase[item.value];
-    const multiplicador = multiplicadorTamanho[tamanho];
-    const precoFinal = precoBase * multiplicador;
-    total += precoFinal;
-    listaServicos += `- ${item.value}\n`;
+    const valor = precos[item.value] * multiplicador[tamanho];
+    total += valor;
+    lista += "- " + item.value + " (R$" + valor.toFixed(2) + ")\n";
   });
 
   let desconto = 0;
   if (selecionados.length >= 2) {
     desconto = total * 0.05;
-    total = total * 0.95;
+    total *= 0.95;
   }
+
+  let agendamentos = JSON.parse(localStorage.getItem("agendamentos")) || [];
+
+  agendamentos.push({
+    nome,
+    telefone,
+    veiculo,
+    servicos: lista,
+    dia,
+    horario
+  });
+
+  localStorage.setItem("agendamentos", JSON.stringify(agendamentos));
 
   const mensagem =
 `🚗 NOVO AGENDAMENTO 🚗
@@ -245,7 +258,7 @@ Veículo: ${veiculo}
 Tamanho: ${tamanho}
 
 Serviços:
-${listaServicos}
+${lista}
 
 Desconto: R$${desconto.toFixed(2)}
 Total Final: R$${total.toFixed(2)}
@@ -256,11 +269,14 @@ Horário: ${horario}`;
   const numero = "5519991984539";
   const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`;
 
-  window.open(url, "_blank");
+  setTimeout(() => {
+    window.open(url, "_blank");
+    botao.classList.remove("loading");
+    botao.innerText = "Confirmar Agendamento";
+  }, 800);
 }
 
 </script>
 
 </body>
 </html>
-
