@@ -93,14 +93,75 @@ button.loading {
 <input type="tel" id="telefone" placeholder="Seu telefone" required>
 <input type="text" id="veiculo" placeholder="Modelo do veículo" required>
 
-<select id="servico">
-<option value="">Selecione o serviço</option>
-<option>Lavagem Simples - R$50</option>
-<option>Lavagem Premium - R$80</option>
-<option>Polimento Técnico - R$250</option>
-<option>Vitrificação - R$900</option>
-<option>Higienização Interna - R$180</option>
+<label>Escolha o serviço:</label>
+
+<select id="servico" onchange="mostrarDetalhes()">
+  <option value="">Selecione</option>
+  <option value="lavagem">Lavagem</option>
+  <option value="polimento">Polimento</option>
+  <option value="higienizacao">Higienização Interna</option>
 </select>
+
+<div id="detalhesServico" style="margin-top:15px;"></div>
+
+<script>
+function mostrarDetalhes() {
+
+  const servico = document.getElementById("servico").value;
+  const detalhes = document.getElementById("detalhesServico");
+
+  if (servico === "lavagem") {
+    detalhes.innerHTML = `
+      <h3>Lavagem</h3>
+
+      <label><input type="radio" name="tipo" value="Lavagem Simples - R$40"> 
+      Lavagem Simples - R$40<br>
+      ✔ Lavagem externa<br>
+      ✔ Limpeza de rodas<br>
+      ✔ Secagem manual</label><br><br>
+
+      <label><input type="radio" name="tipo" value="Lavagem Premium - R$80"> 
+      Lavagem Premium - R$80<br>
+      ✔ Lavagem externa<br>
+      ✔ Limpeza interna<br>
+      ✔ Pretinho nos pneus<br>
+      ✔ Cera líquida</label>
+    `;
+  }
+
+  else if (servico === "polimento") {
+    detalhes.innerHTML = `
+      <h3>Polimento</h3>
+
+      <label><input type="radio" name="tipo" value="Polimento Técnico - R$350">
+      Polimento Técnico - R$350<br>
+      ✔ Remoção de riscos leves<br>
+      ✔ Brilho profundo</label><br><br>
+
+      <label><input type="radio" name="tipo" value="Polimento Vitrificação - R$900">
+      Polimento + Vitrificação - R$900<br>
+      ✔ Correção de pintura<br>
+      ✔ Proteção cerâmica</label>
+    `;
+  }
+
+  else if (servico === "higienizacao") {
+    detalhes.innerHTML = `
+      <h3>Higienização Interna</h3>
+
+      <label><input type="radio" name="tipo" value="Bancos - R$150">
+      Apenas Bancos - R$150</label><br><br>
+
+      <label><input type="radio" name="tipo" value="Completa - R$300">
+      Completa (Bancos, Carpete, Forro, Teto) - R$300</label>
+    `;
+  }
+
+  else {
+    detalhes.innerHTML = "";
+  }
+}
+</script>
 
 <select id="dia">
 <option value="">Selecione o dia</option>
@@ -127,7 +188,15 @@ button.loading {
 </select>
 
 <button onclick="enviarWhatsApp()">Confirmar Agendamento</button>
+const tipoSelecionado = document.querySelector('input[name="tipo"]:checked');
 
+if (!tipoSelecionado) {
+  alert("Selecione o tipo de serviço");
+  return;
+}
+
+const tipo = tipoSelecionado.value;
+  
 </div>
 <script>
 function enviarWhatsApp() {
@@ -144,12 +213,13 @@ function enviarWhatsApp() {
   const horario = document.querySelector("select:nth-of-type(3)").value;
 
   const mensagem =
+  
 `🚗 *NOVO AGENDAMENTO* 🚗
 
 👤 Nome: ${nome}
 📞 Telefone: ${telefone}
 🚘 Veículo: ${veiculo}
-🧼 Serviço: ${servico}
+🧼 Serviço: ${tipo}
 📅 Dia: ${dia}
 ⏰ Horário: ${horario}
 
@@ -166,5 +236,6 @@ Confirmado via app Vmuka-Car`;
 }
 </script>
   
+
 
 
