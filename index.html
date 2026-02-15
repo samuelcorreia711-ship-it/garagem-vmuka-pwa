@@ -4,16 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Garagem Vmuka-Car Estética Automotiva</title>
-  
+
 <link rel="manifest" href="manifest.json">
-
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
-
+<link rel="icon" sizes="192x192" href="icon192.png">
+<link rel="icon" sizes="512x512" href="icon512.png">
 <meta name="theme-color" content="#00bfff">
-  
-<style>
 
+<style>
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -23,65 +20,64 @@ body {
   color: white;
 }
 
-/* sem cama escura */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(0,0,0,0.45);
   z-index: -1;
 }
 
 .container {
   max-width: 420px;
   margin: 40px auto;
-  background: rgba(0, 0, 0, 0.55);
-  backdrop-filter: blur(4px);
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(5px);
   padding: 25px;
   border-radius: 25px;
-  box-shadow: 0 0 40px rgba(0, 200, 255, 0.6);
+  box-shadow: 0 0 30px rgba(0,200,255,0.5);
 }
 
 h1 {
   text-align: center;
   color: #00cfff;
-  margin-bottom: 5px;
 }
 
 .sub {
   text-align: center;
-  margin-bottom: 25px;
-  color: #eee;
   font-size: 14px;
+  margin-bottom: 20px;
 }
 
 input, select {
   width: 100%;
-  padding: 14px;
-  margin: 10px 0;
+  padding: 12px;
+  margin: 8px 0;
   border-radius: 12px;
   border: none;
   background: rgba(255,255,255,0.15);
   color: white;
-  font-size: 15px;
 }
 
-<button id="btnAgendar" onclick="enviarWhatsApp()">
-  Confirmar Agendamento
-</button>
-
-  
+button {
+  width: 100%;
+  padding: 14px;
+  margin-top: 15px;
+  border-radius: 12px;
+  border: none;
+  background: #00cfff;
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
 }
 
 button.loading {
-  opacity: 0.7;
+  opacity: 0.6;
   pointer-events: none;
 }
-  
-}
-
 </style>
 </head>
+
 <body>
 
 <div class="container">
@@ -89,12 +85,11 @@ button.loading {
 <h1>Garagem Vmuka-Car</h1>
 <p class="sub">Atendimento de Segunda a Sábado até 18:00 🚗✨</p>
 
-<input type="text" id="nome" placeholder="Seu nome completo" required>
-<input type="tel" id="telefone" placeholder="Seu telefone" required>
-<input type="text" id="veiculo" placeholder="Modelo do veículo" required>
+<input type="text" id="nome" placeholder="Seu nome completo">
+<input type="tel" id="telefone" placeholder="Seu telefone">
+<input type="text" id="veiculo" placeholder="Modelo do veículo">
 
 <label>Escolha o serviço:</label>
-
 <select id="servico" onchange="mostrarDetalhes()">
   <option value="">Selecione</option>
   <option value="lavagem">Lavagem</option>
@@ -102,66 +97,7 @@ button.loading {
   <option value="higienizacao">Higienização Interna</option>
 </select>
 
-<div id="detalhesServico" style="margin-top:15px;"></div>
-
-<script>
-function mostrarDetalhes() {
-
-  const servico = document.getElementById("servico").value;
-  const detalhes = document.getElementById("detalhesServico");
-
-  if (servico === "lavagem") {
-    detalhes.innerHTML = `
-      <h3>Lavagem</h3>
-
-      <label><input type="radio" name="tipo" value="Lavagem Simples - R$40"> 
-      Lavagem Simples - R$40<br>
-      ✔ Lavagem externa<br>
-      ✔ Limpeza de rodas<br>
-      ✔ Secagem manual</label><br><br>
-
-      <label><input type="radio" name="tipo" value="Lavagem Premium - R$80"> 
-      Lavagem Premium - R$80<br>
-      ✔ Lavagem externa<br>
-      ✔ Limpeza interna<br>
-      ✔ Pretinho nos pneus<br>
-      ✔ Cera líquida</label>
-    `;
-  }
-
-  else if (servico === "polimento") {
-    detalhes.innerHTML = `
-      <h3>Polimento</h3>
-
-      <label><input type="radio" name="tipo" value="Polimento Técnico - R$350">
-      Polimento Técnico - R$350<br>
-      ✔ Remoção de riscos leves<br>
-      ✔ Brilho profundo</label><br><br>
-
-      <label><input type="radio" name="tipo" value="Polimento Vitrificação - R$900">
-      Polimento + Vitrificação - R$900<br>
-      ✔ Correção de pintura<br>
-      ✔ Proteção cerâmica</label>
-    `;
-  }
-
-  else if (servico === "higienizacao") {
-    detalhes.innerHTML = `
-      <h3>Higienização Interna</h3>
-
-      <label><input type="radio" name="tipo" value="Bancos - R$150">
-      Apenas Bancos - R$150</label><br><br>
-
-      <label><input type="radio" name="tipo" value="Completa - R$300">
-      Completa (Bancos, Carpete, Forro, Teto) - R$300</label>
-    `;
-  }
-
-  else {
-    detalhes.innerHTML = "";
-  }
-}
-</script>
+<div id="detalhesServico"></div>
 
 <select id="dia">
 <option value="">Selecione o dia</option>
@@ -187,55 +123,121 @@ function mostrarDetalhes() {
 <option>18:00</option>
 </select>
 
-<button onclick="enviarWhatsApp()">Confirmar Agendamento</button>
-const tipoSelecionado = document.querySelector('input[name="tipo"]:checked');
+<button id="btnAgendar" onclick="enviarWhatsApp()">Confirmar Agendamento</button>
 
-if (!tipoSelecionado) {
-  alert("Selecione o tipo de serviço");
-  return;
+</div>
+
+<<script>
+
+const precosBase = {
+  "Lavagem Simples": 40,
+  "Lavagem Premium": 80,
+  "Polimento Técnico": 350,
+  "Polimento + Vitrificação": 900,
+  "Higienização Bancos": 150,
+  "Higienização Completa": 300
+};
+
+const multiplicadorTamanho = {
+  "Pequeno": 1,
+  "Médio": 1.25,
+  "Grande": 1.5
+};
+
+const checkboxes = document.querySelectorAll("#servicos input[type='checkbox']");
+checkboxes.forEach(cb => cb.addEventListener("change", calcularTotal));
+
+document.getElementById("tamanho")?.addEventListener("change", calcularTotal);
+
+function calcularTotal() {
+  const tamanho = document.getElementById("tamanho").value;
+  let total = 0;
+
+  const selecionados = document.querySelectorAll("#servicos input[type='checkbox']:checked");
+
+  selecionados.forEach(item => {
+    const nomeServico = item.value.split("-")[0].trim();
+    const precoBase = precosBase[nomeServico];
+    const multiplicador = multiplicadorTamanho[tamanho] || 1;
+
+    total += precoBase * multiplicador;
+  });
+
+  if (selecionados.length >= 2) {
+    total = total * 0.95; // 5% desconto
+  }
+
+  document.getElementById("totalValor").innerText = 
+    "Total: R$" + total.toFixed(2);
 }
 
-const tipo = tipoSelecionado.value;
-  
-</div>
-<script>
 function enviarWhatsApp() {
 
   const botao = document.getElementById("btnAgendar");
   botao.classList.add("loading");
   botao.innerText = "Enviando...";
 
-  const nome = document.querySelector("input[placeholder='Seu nome completo']").value;
-  const telefone = document.querySelector("input[placeholder='Seu telefone']").value;
-  const veiculo = document.querySelector("input[placeholder='Modelo do veículo']").value;
-  const servico = document.querySelector("select:nth-of-type(1)").value;
-  const dia = document.querySelector("select:nth-of-type(2)").value;
-  const horario = document.querySelector("select:nth-of-type(3)").value;
+  const nome = document.getElementById("nome").value;
+  const telefone = document.getElementById("telefone").value;
+  const veiculo = document.getElementById("veiculo").value;
+  const tamanho = document.getElementById("tamanho").value;
+  const dia = document.getElementById("dia").value;
+  const horario = document.getElementById("horario").value;
+
+  const selecionados = document.querySelectorAll("#servicos input[type='checkbox']:checked");
+
+  if (!nome || !telefone || !veiculo || !tamanho || selecionados.length === 0 || !dia || !horario) {
+    alert("Preencha todos os campos");
+    botao.classList.remove("loading");
+    botao.innerText = "Confirmar Agendamento";
+    return;
+  }
+
+  let listaServicos = "";
+  let total = 0;
+
+  selecionados.forEach(item => {
+    const nomeServico = item.value.split("-")[0].trim();
+    const precoBase = precosBase[nomeServico];
+    const multiplicador = multiplicadorTamanho[tamanho];
+
+    const precoFinal = precoBase * multiplicador;
+    total += precoFinal;
+
+    listaServicos += `- ${nomeServico} (R$${precoFinal.toFixed(2)})\n`;
+  });
+
+  let desconto = 0;
+  if (selecionados.length >= 2) {
+    desconto = total * 0.05;
+    total = total * 0.95;
+  }
 
   const mensagem =
-  
-`🚗 *NOVO AGENDAMENTO* 🚗
+`🚗 NOVO AGENDAMENTO 🚗
 
-👤 Nome: ${nome}
-📞 Telefone: ${telefone}
-🚘 Veículo: ${veiculo}
-🧼 Serviço: ${tipo}
-📅 Dia: ${dia}
-⏰ Horário: ${horario}
+Nome: ${nome}
+Telefone: ${telefone}
+Veículo: ${veiculo}
+Tamanho: ${tamanho}
 
-Confirmado via app Vmuka-Car`;
+Serviços:
+${listaServicos}
+
+Desconto: R$${desconto.toFixed(2)}
+Total Final: R$${total.toFixed(2)}
+
+Dia: ${dia}
+Horário: ${horario}`;
 
   const numero = "5519991984539";
   const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`;
 
   setTimeout(() => {
-    window.open(url, '_blank');
+    window.open(url, "_blank");
     botao.classList.remove("loading");
     botao.innerText = "Confirmar Agendamento";
-  }, 1000);
+  }, 800);
 }
+
 </script>
-  
-
-
-
