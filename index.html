@@ -4,7 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Garagem Vmuka-Car Estética Automotiva</title>
+  
+<link rel="manifest" href="manifest.json">
 
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+
+<meta name="theme-color" content="#00bfff">
+  
 <style>
 
 body {
@@ -16,7 +23,7 @@ body {
   color: white;
 }
 
-/* Camada escura leve */
+/* sem cama escura */
 body::before {
   content: "";
   position: fixed;
@@ -59,21 +66,18 @@ input, select {
   font-size: 15px;
 }
 
-button {
-  width: 100%;
-  padding: 16px;
-  margin-top: 20px;
-  border-radius: 20px;
-  border: none;
-  font-size: 17px;
-  font-weight: bold;
-  background: linear-gradient(45deg,#00cfff,#0072ff);
-  color: white;
-  cursor: pointer;
+<button id="btnAgendar" onclick="enviarWhatsApp()">
+  Confirmar Agendamento
+</button>
+
+  
 }
 
-button:hover {
-  opacity: 0.9;
+button.loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+  
 }
 
 </style>
@@ -125,42 +129,40 @@ button:hover {
 <button onclick="enviarWhatsApp()">Confirmar Agendamento</button>
 
 </div>
-
 <script>
-
 function enviarWhatsApp() {
 
-  let nome = document.getElementById("nome").value;
-  let telefone = document.getElementById("telefone").value;
-  let veiculo = document.getElementById("veiculo").value;
-  let servico = document.getElementById("servico").value;
-  let dia = document.getElementById("dia").value;
-  let horario = document.getElementById("horario").value;
+  const botao = document.getElementById("btnAgendar");
+  botao.classList.add("loading");
+  botao.innerText = "Enviando...";
 
-  if (!nome || !telefone || !veiculo || !servico || !dia || !horario) {
-    alert("Preencha todos os campos!");
-    return;
-  }
+  const nome = document.querySelector("input[placeholder='Seu nome completo']").value;
+  const telefone = document.querySelector("input[placeholder='Seu telefone']").value;
+  const veiculo = document.querySelector("input[placeholder='Modelo do veículo']").value;
+  const servico = document.querySelector("select:nth-of-type(1)").value;
+  const dia = document.querySelector("select:nth-of-type(2)").value;
+  const horario = document.querySelector("select:nth-of-type(3)").value;
 
-  let mensagem = `🚗 *Novo Agendamento - Garagem Vmuka-Car* 🚗
+  const mensagem =
+`🚗 *NOVO AGENDAMENTO* 🚗
 
 👤 Nome: ${nome}
 📞 Telefone: ${telefone}
 🚘 Veículo: ${veiculo}
-🛠 Serviço: ${servico}
+🧼 Serviço: ${servico}
 📅 Dia: ${dia}
 ⏰ Horário: ${horario}
 
-Cliente confirmou o horário!`;
+Confirmado via app Vmuka-Car`;
 
-  let numero = "5519991984539";
-  let url = `https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`;
+  const numero = "5519991984539";
+  const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`;
 
-  window.open(url, "_blank");
+  setTimeout(() => {
+    window.open(url, '_blank');
+    botao.classList.remove("loading");
+    botao.innerText = "Confirmar Agendamento";
+  }, 1000);
 }
-
 </script>
-
-</body>
-</html>
-
+  
