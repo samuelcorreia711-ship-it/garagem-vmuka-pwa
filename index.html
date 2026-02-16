@@ -11,88 +11,93 @@
 <meta name="theme-color" content="#00bfff">
 
 <style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: url("logo.png") no-repeat center center fixed;
-  background-size: 600px;
-  background-color: #000;
-  color: white;
+body{
+  margin:0;
+  font-family:Arial;
+  background:url("logo.png") no-repeat center center fixed;
+  background-size:500px;
+  background-color:#000;
+  color:white;
 }
 
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.5);
-  z-index: -1;
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.25);
+  z-index:-1;
 }
 
-.container {
-  max-width: 420px;
-  margin: 40px auto;
-  background: rgba(0,0,0,0.6);
-  padding: 25px;
-  border-radius: 25px;
-  box-shadow: 0 0 30px rgba(0,200,255,0.5);
+.container{
+  max-width:420px;
+  margin:40px auto;
+  background:rgba(0,0,0,0.6);
+  backdrop-filter:blur(6px);
+  padding:25px;
+  border-radius:25px;
+  box-shadow:0 0 30px rgba(0,200,255,0.5);
 }
 
-h1 {
-  text-align: center;
-  color: #00cfff;
+h1{
+  text-align:center;
+  color:#00cfff;
 }
 
-.sub {
-  text-align: center;
-  font-size: 14px;
-  margin-bottom: 20px;
+input,select{
+  width:100%;
+  padding:12px;
+  margin:8px 0;
+  border-radius:12px;
+  border:none;
+  background:rgba(255,255,255,0.15);
+  color:white;
 }
 
-input, select {
-  width: 100%;
-  padding: 12px;
-  margin: 8px 0;
-  border-radius: 12px;
-  border: none;
-  background: rgba(255,255,255,0.15);
-  color: white;
+button{
+  width:100%;
+  padding:14px;
+  margin-top:15px;
+  border-radius:12px;
+  border:none;
+  background:#00cfff;
+  color:black;
+  font-weight:bold;
+  cursor:pointer;
+  transition:0.2s;
 }
 
-.servicos {
-  background: rgba(255,255,255,0.05);
-  padding: 15px;
-  border-radius: 15px;
-  margin-top: 10px;
+button:hover{
+  transform:scale(1.03);
 }
 
-.servicos label {
-  display: block;
-  margin: 8px 0;
+button.loading{
+  opacity:0.6;
+  pointer-events:none;
 }
 
-.total {
-  margin-top: 15px;
-  font-size: 18px;
-  color: #00ffcc;
-  font-weight: bold;
-  text-align: center;
+.grade-horarios{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-top:15px;
 }
 
-button {
-  width: 100%;
-  padding: 14px;
-  margin-top: 15px;
-  border-radius: 12px;
-  border: none;
-  background: #00cfff;
-  color: black;
-  font-weight: bold;
-  cursor: pointer;
+.grade-horarios button{
+  padding:12px;
+  border-radius:12px;
+  border:none;
+  font-weight:bold;
+  cursor:pointer;
 }
 
-button.loading {
-  opacity: 0.6;
-  pointer-events: none;
+.livre{background:#00cfff;color:black;}
+.ocupado{background:#444;color:#999;cursor:not-allowed;}
+.selecionado{background:#00ff88 !important;color:black;transform:scale(1.08);}
+
+#totalValor{
+  margin-top:15px;
+  font-weight:bold;
+  color:#00ffcc;
 }
 </style>
 </head>
@@ -102,210 +107,212 @@ button.loading {
 <div class="container">
 
 <h1>Garagem Vmuka-Car</h1>
-<p class="sub">Atendimento de Segunda a Sábado até 18:00 🚗✨</p>
 
 <input type="text" id="nome" placeholder="Seu nome completo">
 <input type="tel" id="telefone" placeholder="Seu telefone">
 <input type="text" id="veiculo" placeholder="Modelo do veículo">
 
-<label>Tamanho do Veículo:</label>
-<select id="tamanho" onchange="calcularTotal()">
-  <option value="">Selecione</option>
-  <option value="Pequeno">Pequeno</option>
-  <option value="Médio">Médio</option>
-  <option value="Grande">Grande</option>
+<label>Escolha o serviço:</label>
+<select id="servico" onchange="mostrarDetalhes()">
+<option value="">Selecione</option>
+<option value="lavagem">Lavagem</option>
+<option value="polimento">Polimento</option>
+<option value="higienizacao">Higienização</option>
 </select>
 
-<div class="servicos" id="servicos">
-
-<strong>Escolha os Serviços:</strong>
-
-<label><input type="checkbox" value="Lavagem Simples"> Lavagem Simples - R$40</label>
-<label><input type="checkbox" value="Lavagem Premium"> Lavagem Premium - R$80</label>
-<label><input type="checkbox" value="Polimento Técnico"> Polimento Técnico - R$350</label>
-<label><input type="checkbox" value="Polimento + Vitrificação"> Polimento + Vitrificação - R$900</label>
-<label><input type="checkbox" value="Higienização Bancos"> Higienização Bancos - R$150</label>
-<label><input type="checkbox" value="Higienização Completa"> Higienização Completa - R$300</label>
-
-</div>
-
-<div class="total" id="totalValor">Total: R$0,00</div>
+<div id="detalhesServico"></div>
 
 <select id="dia">
-<option value="">Selecione o dia</option>
-<option>Segunda-feira</option>
-<option>Terça-feira</option>
-<option>Quarta-feira</option>
-<option>Quinta-feira</option>
-<option>Sexta-feira</option>
-<option>Sábado</option>
+<option value="">Selecione a data</option>
 </select>
 
-<select id="horario">
-<option value="">Selecione o horário</option>
-<option>08:00</option>
-<option>09:00</option>
-<option>10:00</option>
-<option>11:00</option>
-<option>13:00</option>
-<option>14:00</option>
-<option>15:00</option>
-<option>16:00</option>
-<option>17:00</option>
-<option>18:00</option>
-</select>
+<h3>Escolha seu horário</h3>
+<div id="gradeHorarios" class="grade-horarios"></div>
+<input type="hidden" id="horarioSelecionado">
+
+<div id="totalValor">Total: R$0.00</div>
 
 <button id="btnAgendar" onclick="enviarWhatsApp()">Confirmar Agendamento</button>
 
 </div>
 
 <script>
-  <script>
 
-const precos = {
-  "Lavagem Simples": 40,
-  "Lavagem Premium": 80,
-  "Polimento Técnico": 350,
-  "Polimento + Vitrificação": 900,
-  "Higienização Bancos": 150,
-  "Higienização Completa": 300
+const precos={
+"Lavagem Simples":40,
+"Lavagem Premium":80,
+"Polimento Técnico":350,
+"Polimento + Vitrificação":900,
+"Higienização Bancos":150,
+"Higienização Completa":300
 };
 
-const multiplicador = {
-  "Pequeno": 1,
-  "Médio": 1.25,
-  "Grande": 1.5
-};
+function mostrarDetalhes(){
+const s=document.getElementById("servico").value;
+const d=document.getElementById("detalhesServico");
 
-document.querySelectorAll("#servicos input").forEach(cb => {
-  cb.addEventListener("change", calcularTotal);
+if(s==="lavagem"){
+d.innerHTML=`
+<label><input type="checkbox" value="Lavagem Simples"> Lavagem Simples - R$40</label><br>
+<label><input type="checkbox" value="Lavagem Premium"> Lavagem Premium - R$80</label>`;
+}
+
+else if(s==="polimento"){
+d.innerHTML=`
+<label><input type="checkbox" value="Polimento Técnico"> Polimento Técnico - R$350</label><br>
+<label><input type="checkbox" value="Polimento + Vitrificação"> Polimento + Vitrificação - R$900</label>`;
+}
+
+else if(s==="higienizacao"){
+d.innerHTML=`
+<label><input type="checkbox" value="Higienização Bancos"> Bancos - R$150</label><br>
+<label><input type="checkbox" value="Higienização Completa"> Completa - R$300</label>`;
+}
+
+setTimeout(()=>{
+document.querySelectorAll("#detalhesServico input")
+.forEach(cb=>cb.addEventListener("change",calcularTotal));
+},100);
+}
+
+function calcularTotal(){
+let total=0;
+const selecionados=document.querySelectorAll("#detalhesServico input:checked");
+
+selecionados.forEach(item=>{
+total+=precos[item.value]||0;
 });
 
-document.getElementById("dia").addEventListener("change", bloquearHorarios);
-
-function calcularTotal() {
-
-  const tamanho = document.getElementById("tamanho").value;
-  const selecionados = document.querySelectorAll("#servicos input:checked");
-
-  let total = 0;
-
-  selecionados.forEach(item => {
-    total += precos[item.value] * (multiplicador[tamanho] || 1);
-  });
-
-  if (selecionados.length >= 2) {
-    total *= 0.95;
-  }
-
-  document.getElementById("totalValor").innerText =
-    "Total: R$" + total.toFixed(2);
+if(selecionados.length>=2){
+total*=0.95;
 }
 
-function bloquearHorarios() {
-
-  const diaSelecionado = document.getElementById("dia").value;
-  const horarios = document.getElementById("horario").options;
-
-  const agendamentos = JSON.parse(localStorage.getItem("agendamentos")) || [];
-
-  for (let i = 0; i < horarios.length; i++) {
-    horarios[i].disabled = false;
-  }
-
-  agendamentos.forEach(ag => {
-    if (ag.dia === diaSelecionado) {
-      for (let i = 0; i < horarios.length; i++) {
-        if (horarios[i].value === ag.horario) {
-          horarios[i].disabled = true;
-        }
-      }
-    }
-  });
+document.getElementById("totalValor").innerText=
+"Total: R$"+total.toFixed(2);
 }
 
-function enviarWhatsApp() {
+function gerarDatas(){
+const select=document.getElementById("dia");
+const hoje=new Date();
 
-  const botao = document.getElementById("btnAgendar");
-  botao.classList.add("loading");
-  botao.innerText = "Enviando...";
+for(let i=0;i<14;i++){
+const data=new Date();
+data.setDate(hoje.getDate()+i);
 
-  const nome = document.getElementById("nome").value;
-  const telefone = document.getElementById("telefone").value;
-  const veiculo = document.getElementById("veiculo").value;
-  const tamanho = document.getElementById("tamanho").value;
-  const dia = document.getElementById("dia").value;
-  const horario = document.getElementById("horario").value;
+if(data.getDay()!==0){
 
-  const selecionados = document.querySelectorAll("#servicos input:checked");
+const nomeDia=data.toLocaleDateString("pt-BR",{weekday:"long"});
+const formatada=data.toLocaleDateString("pt-BR");
 
-  if (!nome || !telefone || !veiculo || !tamanho || selecionados.length === 0 || !dia || !horario) {
-    alert("Preencha todos os campos");
-    botao.classList.remove("loading");
-    botao.innerText = "Confirmar Agendamento";
-    return;
-  }
+const texto=nomeDia.charAt(0).toUpperCase()+nomeDia.slice(1)+" - "+formatada;
 
-  let lista = "";
-  let total = 0;
+const option=document.createElement("option");
+option.value=texto;
+option.textContent=texto;
 
-  selecionados.forEach(item => {
-    const valor = precos[item.value] * multiplicador[tamanho];
-    total += valor;
-    lista += "- " + item.value + " (R$" + valor.toFixed(2) + ")\n";
-  });
+select.appendChild(option);
+}
+}
+}
+gerarDatas();
 
-  let desconto = 0;
-  if (selecionados.length >= 2) {
-    desconto = total * 0.05;
-    total *= 0.95;
-  }
+const horariosPadrao=["08:00","09:00","10:00","11:00","13:00","14:00","15:00","16:00","17:00","18:00"];
 
-  let agendamentos = JSON.parse(localStorage.getItem("agendamentos")) || [];
+function gerarHorarios(){
+const dia=document.getElementById("dia").value;
+const grade=document.getElementById("gradeHorarios");
+grade.innerHTML="";
+if(!dia)return;
 
-  agendamentos.push({
-    nome,
-    telefone,
-    veiculo,
-    servicos: lista,
-    dia,
-    horario
-  });
+const agendamentos=JSON.parse(localStorage.getItem("agendamentos"))||[];
 
-  localStorage.setItem("agendamentos", JSON.stringify(agendamentos));
+const ocupados=agendamentos.filter(a=>a.dia===dia).map(a=>a.horario);
 
-  bloquearHorarios();
+horariosPadrao.forEach(hora=>{
+const botao=document.createElement("button");
+botao.innerText=hora;
 
-  const mensagem =
+if(ocupados.includes(hora)){
+botao.classList.add("ocupado");
+botao.disabled=true;
+}else{
+botao.classList.add("livre");
+botao.onclick=()=>selecionarHorario(botao,hora);
+}
+
+grade.appendChild(botao);
+});
+}
+
+function selecionarHorario(botao,hora){
+document.querySelectorAll(".grade-horarios button")
+.forEach(b=>b.classList.remove("selecionado"));
+
+botao.classList.add("selecionado");
+document.getElementById("horarioSelecionado").value=hora;
+}
+
+document.getElementById("dia").addEventListener("change",gerarHorarios);
+
+function enviarWhatsApp(){
+
+const botao=document.getElementById("btnAgendar");
+botao.classList.add("loading");
+botao.innerText="Enviando...";
+
+const nome=document.getElementById("nome").value;
+const telefone=document.getElementById("telefone").value;
+const veiculo=document.getElementById("veiculo").value;
+const dia=document.getElementById("dia").value;
+const horario=document.getElementById("horarioSelecionado").value;
+const selecionados=document.querySelectorAll("#detalhesServico input:checked");
+
+if(!nome||!telefone||!veiculo||!dia||!horario||selecionados.length===0){
+alert("Preencha todos os campos");
+botao.classList.remove("loading");
+botao.innerText="Confirmar Agendamento";
+return;
+}
+
+let lista="";
+let total=0;
+
+selecionados.forEach(item=>{
+lista+=item.value+"\n";
+total+=precos[item.value]||0;
+});
+
+if(selecionados.length>=2){total*=0.95;}
+
+const agendamentos=JSON.parse(localStorage.getItem("agendamentos"))||[];
+agendamentos.push({nome,dia,horario});
+localStorage.setItem("agendamentos",JSON.stringify(agendamentos));
+
+const mensagem=
 `🚗 NOVO AGENDAMENTO 🚗
 
 Nome: ${nome}
 Telefone: ${telefone}
 Veículo: ${veiculo}
-Tamanho: ${tamanho}
 
 Serviços:
 ${lista}
 
-Desconto: R$${desconto.toFixed(2)}
-Total Final: R$${total.toFixed(2)}
+Total: R$${total.toFixed(2)}
 
-Dia: ${dia}
+Data: ${dia}
 Horário: ${horario}`;
 
-  const numero = "5519991984539";
-  const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`;
+const numero="5519991984539";
+const url=`https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`;
 
-  setTimeout(() => {
-    window.open(url, "_blank");
-    botao.classList.remove("loading");
-    botao.innerText = "Confirmar Agendamento";
-  }, 800);
+setTimeout(()=>{
+window.open(url,"_blank");
+botao.classList.remove("loading");
+botao.innerText="Confirmar Agendamento";
+},800);
 }
 
-window.onload = bloquearHorarios;
-
 </script>
-  
-
-  
+</body>
+</html>
