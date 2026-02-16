@@ -6,19 +6,29 @@
 <title>Garagem Vmuka-Car Estética Automotiva</title>
 
 <style>
+
 body{
   margin:0;
   font-family:Arial;
-  background:#0f0f0f;
+  background:linear-gradient(135deg,#0f0f0f,#001f3f);
   color:white;
 }
 
 .header{
   text-align:center;
-  padding:20px;
-  font-size:22px;
-  font-weight:bold;
+  padding:30px 20px;
   background:linear-gradient(90deg,#00cfff,#0077ff);
+  box-shadow:0 0 20px #00cfff;
+}
+
+.logo{
+  width:120px;
+  margin-bottom:10px;
+}
+
+.titulo{
+  font-size:20px;
+  font-weight:bold;
 }
 
 .container{
@@ -27,14 +37,21 @@ body{
 
 .step{
   display:none;
+  animation:fade 0.4s ease-in-out;
 }
 
 .step.active{
   display:block;
 }
 
+@keyframes fade{
+  from{opacity:0; transform:translateY(10px);}
+  to{opacity:1; transform:translateY(0);}
+}
+
 .card{
-  background:#1c1c1c;
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(10px);
   padding:15px;
   border-radius:15px;
   margin-bottom:15px;
@@ -45,11 +62,12 @@ body{
 
 .card:hover{
   border:2px solid #00cfff;
+  transform:scale(1.02);
 }
 
 .card.selected{
   border:2px solid #00cfff;
-  background:#16222f;
+  background:rgba(0,207,255,0.15);
 }
 
 button{
@@ -60,9 +78,14 @@ button{
   margin-top:20px;
   font-size:16px;
   cursor:pointer;
-  background:#00cfff;
-  color:black;
+  background:linear-gradient(90deg,#00cfff,#0077ff);
+  color:white;
   font-weight:bold;
+  transition:0.3s;
+}
+
+button:hover{
+  transform:scale(1.03);
 }
 
 input{
@@ -74,23 +97,32 @@ input{
 }
 
 .total-box{
-  background:#1c1c1c;
+  background:rgba(255,255,255,0.08);
   padding:15px;
   border-radius:12px;
   margin-top:15px;
 }
+
 </style>
 </head>
 
 <body>
 
 <div class="header">
-🚗 Garagem Vmuka-Car
+
+<!-- COLOQUE AQUI SUA LOGO -->
+<img src="logo.png" class="logo">
+
+<div class="titulo">
+Garagem Vmuka-Car<br>
+Estética Automotiva
+</div>
+
 </div>
 
 <div class="container">
 
-<!-- ETAPA 1 SERVIÇOS -->
+<!-- ETAPA 1 -->
 <div class="step active" id="step1">
 <h3>Escolha os Serviços</h3>
 
@@ -101,7 +133,7 @@ Lavagem externa + rodas + secagem
 
 <div class="card" onclick="toggleServico(this,'Lavagem Premium',80)">
 <b>Lavagem Premium - R$80</b><br>
-Lavagem completa + pretinho + painel
+Lavagem completa + pretinho + painel detalhado
 </div>
 
 <div class="card" onclick="toggleServico(this,'Higienização Interna Completa',300)">
@@ -111,29 +143,27 @@ Bancos, carpete, teto, forro e porta-malas
 
 <div class="card" onclick="toggleServico(this,'Polimento Técnico',450)">
 <b>Polimento Técnico - R$450</b><br>
-Remoção de riscos + brilho profundo
+Remoção de riscos + brilho espelhado
 </div>
 
 <button onclick="proximo(2)">Próximo</button>
 </div>
 
-<!-- ETAPA 2 DATA -->
+<!-- ETAPA 2 -->
 <div class="step" id="step2">
 <h3>Escolha a Data</h3>
 <input type="date" id="data">
 <button onclick="proximo(3)">Próximo</button>
 </div>
 
-<!-- ETAPA 3 HORÁRIO -->
+<!-- ETAPA 3 -->
 <div class="step" id="step3">
 <h3>Escolha o Horário</h3>
-
 <div id="horarios"></div>
-
 <button onclick="proximo(4)">Próximo</button>
 </div>
 
-<!-- ETAPA 4 DADOS -->
+<!-- ETAPA 4 -->
 <div class="step" id="step4">
 <h3>Seus Dados</h3>
 
@@ -154,15 +184,8 @@ let servicos = [];
 let total = 0;
 let horarioSelecionado = "";
 
-const tabela = {
-  "Lavagem Simples":50,
-  "Lavagem Premium":80,
-  "Higienização Interna Completa":300,
-  "Polimento Técnico":450
-};
-
-function toggleServico(elemento,nome,preco){
-  elemento.classList.toggle("selected");
+function toggleServico(el,nome,preco){
+  el.classList.toggle("selected");
 
   if(servicos.includes(nome)){
     servicos = servicos.filter(s=>s!==nome);
@@ -174,6 +197,7 @@ function toggleServico(elemento,nome,preco){
 }
 
 function proximo(step){
+
   if(step==2 && servicos.length==0){
     alert("Selecione pelo menos 1 serviço");
     return;
