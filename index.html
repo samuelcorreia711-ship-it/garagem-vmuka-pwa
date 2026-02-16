@@ -1,318 +1,279 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Garagem Vmuka-Car Estética Automotiva</title>
 
-<link rel="manifest" href="manifest.json">
-<link rel="icon" sizes="192x192" href="icon192.png">
-<link rel="icon" sizes="512x512" href="icon512.png">
-<meta name="theme-color" content="#00bfff">
-
 <style>
 body{
   margin:0;
   font-family:Arial;
-  background:url("logo.png") no-repeat center center fixed;
-  background-size:500px;
-  background-color:#000;
+  background:#0f0f0f;
   color:white;
 }
 
-body::before{
-  content:"";
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.25);
-  z-index:-1;
+.header{
+  text-align:center;
+  padding:20px;
+  font-size:22px;
+  font-weight:bold;
+  background:linear-gradient(90deg,#00cfff,#0077ff);
 }
 
 .container{
-  max-width:420px;
-  margin:40px auto;
-  background:rgba(0,0,0,0.6);
-  backdrop-filter:blur(6px);
-  padding:25px;
-  border-radius:25px;
-  box-shadow:0 0 30px rgba(0,200,255,0.5);
+  padding:20px;
 }
 
-h1{
-  text-align:center;
-  color:#00cfff;
+.step{
+  display:none;
 }
 
-input,select{
-  width:100%;
-  padding:12px;
-  margin:8px 0;
-  border-radius:12px;
-  border:none;
-  background:rgba(255,255,255,0.15);
-  color:white;
+.step.active{
+  display:block;
+}
+
+.card{
+  background:#1c1c1c;
+  padding:15px;
+  border-radius:15px;
+  margin-bottom:15px;
+  cursor:pointer;
+  transition:0.3s;
+  border:2px solid transparent;
+}
+
+.card:hover{
+  border:2px solid #00cfff;
+}
+
+.card.selected{
+  border:2px solid #00cfff;
+  background:#16222f;
 }
 
 button{
   width:100%;
-  padding:14px;
-  margin-top:15px;
-  border-radius:12px;
+  padding:15px;
   border:none;
+  border-radius:12px;
+  margin-top:20px;
+  font-size:16px;
+  cursor:pointer;
   background:#00cfff;
   color:black;
   font-weight:bold;
-  cursor:pointer;
-  transition:0.2s;
 }
 
-button:hover{
-  transform:scale(1.03);
-}
-
-button.loading{
-  opacity:0.6;
-  pointer-events:none;
-}
-
-.grade-horarios{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:10px;
-  margin-top:15px;
-}
-
-.grade-horarios button{
+input{
+  width:100%;
   padding:12px;
-  border-radius:12px;
+  border-radius:10px;
   border:none;
-  font-weight:bold;
-  cursor:pointer;
+  margin-bottom:10px;
 }
 
-.livre{background:#00cfff;color:black;}
-.ocupado{background:#444;color:#999;cursor:not-allowed;}
-.selecionado{background:#00ff88 !important;color:black;transform:scale(1.08);}
-
-#totalValor{
+.total-box{
+  background:#1c1c1c;
+  padding:15px;
+  border-radius:12px;
   margin-top:15px;
-  font-weight:bold;
-  color:#00ffcc;
 }
 </style>
 </head>
 
 <body>
 
+<div class="header">
+🚗 Garagem Vmuka-Car
+</div>
+
 <div class="container">
 
-<h1>Garagem Vmuka-Car</h1>
+<!-- ETAPA 1 SERVIÇOS -->
+<div class="step active" id="step1">
+<h3>Escolha os Serviços</h3>
 
-<input type="text" id="nome" placeholder="Seu nome completo">
-<input type="tel" id="telefone" placeholder="Seu telefone">
-<input type="text" id="veiculo" placeholder="Modelo do veículo">
+<div class="card" onclick="toggleServico(this,'Lavagem Simples',50)">
+<b>Lavagem Simples - R$50</b><br>
+Lavagem externa + rodas + secagem
+</div>
 
-<label>Escolha o serviço:</label>
-<select id="servico" onchange="mostrarDetalhes()">
-<option value="">Selecione</option>
-<option value="lavagem">Lavagem</option>
-<option value="polimento">Polimento</option>
-<option value="higienizacao">Higienização</option>
-</select>
+<div class="card" onclick="toggleServico(this,'Lavagem Premium',80)">
+<b>Lavagem Premium - R$80</b><br>
+Lavagem completa + pretinho + painel
+</div>
 
-<div id="detalhesServico"></div>
+<div class="card" onclick="toggleServico(this,'Higienização Interna Completa',300)">
+<b>Higienização Completa - R$300</b><br>
+Bancos, carpete, teto, forro e porta-malas
+</div>
 
-<select id="dia">
-<option value="">Selecione a data</option>
-</select>
+<div class="card" onclick="toggleServico(this,'Polimento Técnico',450)">
+<b>Polimento Técnico - R$450</b><br>
+Remoção de riscos + brilho profundo
+</div>
 
-<h3>Escolha seu horário</h3>
-<div id="gradeHorarios" class="grade-horarios"></div>
-<input type="hidden" id="horarioSelecionado">
+<button onclick="proximo(2)">Próximo</button>
+</div>
 
-<div id="totalValor">Total: R$0.00</div>
+<!-- ETAPA 2 DATA -->
+<div class="step" id="step2">
+<h3>Escolha a Data</h3>
+<input type="date" id="data">
+<button onclick="proximo(3)">Próximo</button>
+</div>
 
-<button id="btnAgendar" onclick="enviarWhatsApp()">Confirmar Agendamento</button>
+<!-- ETAPA 3 HORÁRIO -->
+<div class="step" id="step3">
+<h3>Escolha o Horário</h3>
+
+<div id="horarios"></div>
+
+<button onclick="proximo(4)">Próximo</button>
+</div>
+
+<!-- ETAPA 4 DADOS -->
+<div class="step" id="step4">
+<h3>Seus Dados</h3>
+
+<input type="text" id="nome" placeholder="Seu nome">
+<input type="text" id="telefone" placeholder="Telefone">
+<input type="text" id="placa" placeholder="Placa do veículo">
+
+<div class="total-box" id="resumo"></div>
+
+<button onclick="confirmar()">Confirmar Agendamento</button>
+</div>
 
 </div>
 
 <script>
 
-const precos={
-"Lavagem Simples":40,
-"Lavagem Premium":80,
-"Polimento Técnico":350,
-"Polimento + Vitrificação":900,
-"Higienização Bancos":150,
-"Higienização Completa":300
+let servicos = [];
+let total = 0;
+let horarioSelecionado = "";
+
+const tabela = {
+  "Lavagem Simples":50,
+  "Lavagem Premium":80,
+  "Higienização Interna Completa":300,
+  "Polimento Técnico":450
 };
 
-function mostrarDetalhes(){
-const s=document.getElementById("servico").value;
-const d=document.getElementById("detalhesServico");
+function toggleServico(elemento,nome,preco){
+  elemento.classList.toggle("selected");
 
-if(s==="lavagem"){
-d.innerHTML=`
-<label><input type="checkbox" value="Lavagem Simples"> Lavagem Simples - R$40</label><br>
-<label><input type="checkbox" value="Lavagem Premium"> Lavagem Premium - R$80</label>`;
+  if(servicos.includes(nome)){
+    servicos = servicos.filter(s=>s!==nome);
+    total -= preco;
+  } else {
+    servicos.push(nome);
+    total += preco;
+  }
 }
 
-else if(s==="polimento"){
-d.innerHTML=`
-<label><input type="checkbox" value="Polimento Técnico"> Polimento Técnico - R$350</label><br>
-<label><input type="checkbox" value="Polimento + Vitrificação"> Polimento + Vitrificação - R$900</label>`;
+function proximo(step){
+  if(step==2 && servicos.length==0){
+    alert("Selecione pelo menos 1 serviço");
+    return;
+  }
+
+  if(step==3){
+    const data = document.getElementById("data").value;
+    if(!data){
+      alert("Escolha uma data");
+      return;
+    }
+    gerarHorarios();
+  }
+
+  if(step==4 && !horarioSelecionado){
+    alert("Escolha um horário");
+    return;
+  }
+
+  document.querySelectorAll(".step").forEach(s=>s.classList.remove("active"));
+  document.getElementById("step"+step).classList.add("active");
+
+  if(step==4){
+    document.getElementById("resumo").innerHTML = `
+    <b>Serviços:</b><br>${servicos.join("<br>")}<br><br>
+    <b>Total:</b> R$ ${total}
+    `;
+  }
 }
-
-else if(s==="higienizacao"){
-d.innerHTML=`
-<label><input type="checkbox" value="Higienização Bancos"> Bancos - R$150</label><br>
-<label><input type="checkbox" value="Higienização Completa"> Completa - R$300</label>`;
-}
-
-setTimeout(()=>{
-document.querySelectorAll("#detalhesServico input")
-.forEach(cb=>cb.addEventListener("change",calcularTotal));
-},100);
-}
-
-function calcularTotal(){
-let total=0;
-const selecionados=document.querySelectorAll("#detalhesServico input:checked");
-
-selecionados.forEach(item=>{
-total+=precos[item.value]||0;
-});
-
-if(selecionados.length>=2){
-total*=0.95;
-}
-
-document.getElementById("totalValor").innerText=
-"Total: R$"+total.toFixed(2);
-}
-
-function gerarDatas(){
-const select=document.getElementById("dia");
-const hoje=new Date();
-
-for(let i=0;i<14;i++){
-const data=new Date();
-data.setDate(hoje.getDate()+i);
-
-if(data.getDay()!==0){
-
-const nomeDia=data.toLocaleDateString("pt-BR",{weekday:"long"});
-const formatada=data.toLocaleDateString("pt-BR");
-
-const texto=nomeDia.charAt(0).toUpperCase()+nomeDia.slice(1)+" - "+formatada;
-
-const option=document.createElement("option");
-option.value=texto;
-option.textContent=texto;
-
-select.appendChild(option);
-}
-}
-}
-gerarDatas();
-
-const horariosPadrao=["08:00","09:00","10:00","11:00","13:00","14:00","15:00","16:00","17:00","18:00"];
 
 function gerarHorarios(){
-const dia=document.getElementById("dia").value;
-const grade=document.getElementById("gradeHorarios");
-grade.innerHTML="";
-if(!dia)return;
+  const div = document.getElementById("horarios");
+  div.innerHTML = "";
 
-const agendamentos=JSON.parse(localStorage.getItem("agendamentos"))||[];
+  const horarios = ["08:00","09:00","10:00","14:00","15:00"];
+  const agendamentos = JSON.parse(localStorage.getItem("agendamentos")) || [];
+  const data = document.getElementById("data").value;
 
-const ocupados=agendamentos.filter(a=>a.dia===dia).map(a=>a.horario);
+  horarios.forEach(h=>{
+    const ocupado = agendamentos.find(a=>a.data==data && a.horario==h);
 
-horariosPadrao.forEach(hora=>{
-const botao=document.createElement("button");
-botao.innerText=hora;
+    const card = document.createElement("div");
+    card.className="card";
+    card.innerText = ocupado ? h+" (Indisponível)" : h;
 
-if(ocupados.includes(hora)){
-botao.classList.add("ocupado");
-botao.disabled=true;
-}else{
-botao.classList.add("livre");
-botao.onclick=()=>selecionarHorario(botao,hora);
+    if(!ocupado){
+      card.onclick = function(){
+        document.querySelectorAll("#horarios .card").forEach(c=>c.classList.remove("selected"));
+        card.classList.add("selected");
+        horarioSelecionado = h;
+      }
+    } else {
+      card.style.opacity="0.4";
+    }
+
+    div.appendChild(card);
+  });
 }
 
-grade.appendChild(botao);
-});
-}
+function confirmar(){
 
-function selecionarHorario(botao,hora){
-document.querySelectorAll(".grade-horarios button")
-.forEach(b=>b.classList.remove("selecionado"));
+  const nome = document.getElementById("nome").value;
+  const telefone = document.getElementById("telefone").value;
+  const placa = document.getElementById("placa").value;
+  const data = document.getElementById("data").value;
 
-botao.classList.add("selecionado");
-document.getElementById("horarioSelecionado").value=hora;
-}
+  if(!nome || !telefone || !placa){
+    alert("Preencha todos os dados");
+    return;
+  }
 
-document.getElementById("dia").addEventListener("change",gerarHorarios);
+  let agendamentos = JSON.parse(localStorage.getItem("agendamentos")) || [];
 
-function enviarWhatsApp(){
+  agendamentos.push({
+    nome,
+    telefone,
+    placa,
+    data,
+    horario:horarioSelecionado,
+    servicos,
+    total
+  });
 
-const botao=document.getElementById("btnAgendar");
-botao.classList.add("loading");
-botao.innerText="Enviando...";
+  localStorage.setItem("agendamentos",JSON.stringify(agendamentos));
 
-const nome=document.getElementById("nome").value;
-const telefone=document.getElementById("telefone").value;
-const veiculo=document.getElementById("veiculo").value;
-const dia=document.getElementById("dia").value;
-const horario=document.getElementById("horarioSelecionado").value;
-const selecionados=document.querySelectorAll("#detalhesServico input:checked");
+  const numero = "5519991984539";
+  const mensagem = `Olá, gostaria de confirmar:%0A
+Nome: ${nome}%0A
+Serviços: ${servicos.join(", ")}%0A
+Data: ${data}%0A
+Horário: ${horarioSelecionado}%0A
+Total: R$ ${total}`;
 
-if(!nome||!telefone||!veiculo||!dia||!horario||selecionados.length===0){
-alert("Preencha todos os campos");
-botao.classList.remove("loading");
-botao.innerText="Confirmar Agendamento";
-return;
-}
+  window.open(`https://wa.me/${numero}?text=${mensagem}`);
 
-let lista="";
-let total=0;
-
-selecionados.forEach(item=>{
-lista+=item.value+"\n";
-total+=precos[item.value]||0;
-});
-
-if(selecionados.length>=2){total*=0.95;}
-
-const agendamentos=JSON.parse(localStorage.getItem("agendamentos"))||[];
-agendamentos.push({nome,dia,horario});
-localStorage.setItem("agendamentos",JSON.stringify(agendamentos));
-
-const mensagem=
-`🚗 NOVO AGENDAMENTO 🚗
-
-Nome: ${nome}
-Telefone: ${telefone}
-Veículo: ${veiculo}
-
-Serviços:
-${lista}
-
-Total: R$${total.toFixed(2)}
-
-Data: ${dia}
-Horário: ${horario}`;
-
-const numero="5519991984539";
-const url=`https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`;
-
-setTimeout(()=>{
-window.open(url,"_blank");
-botao.classList.remove("loading");
-botao.innerText="Confirmar Agendamento";
-},800);
+  alert("Agendamento realizado!");
+  location.reload();
 }
 
 </script>
+
 </body>
 </html>
