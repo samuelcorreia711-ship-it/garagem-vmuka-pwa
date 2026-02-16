@@ -3,41 +3,66 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Garagem Vmuka-Car Estética Automotiva</title>
+<title>Garagem Vmuka-Car</title>
 
 <style>
 
 body{
   margin:0;
-  font-family:Arial;
-  background:linear-gradient(135deg,#0f0f0f,#001f3f);
+  font-family:'Segoe UI',sans-serif;
+  background:#050505;
   color:white;
+  overflow-x:hidden;
+}
+
+/* LOGO FUNDO ANIMADA */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:url("logo.png") no-repeat center center;
+  background-size:500px;
+  opacity:0.10;
+  animation:respirar 6s ease-in-out infinite;
+  z-index:-2;
+}
+
+/* Camada premium escura */
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:radial-gradient(circle at center, rgba(0,200,255,0.05), rgba(0,0,0,0.95));
+  z-index:-1;
+}
+
+@keyframes respirar{
+  0%{ transform:scale(1); opacity:0.08;}
+  50%{ transform:scale(1.05); opacity:0.15;}
+  100%{ transform:scale(1); opacity:0.08;}
 }
 
 .header{
   text-align:center;
-  padding:30px 20px;
-  background:linear-gradient(90deg,#00cfff,#0077ff);
-  box-shadow:0 0 20px #00cfff;
+  padding:30px 20px 10px;
 }
 
-.logo{
-  width:120px;
-  margin-bottom:10px;
-}
-
-.titulo{
-  font-size:20px;
-  font-weight:bold;
+.header h1{
+  color:#00cfff;
+  font-weight:600;
+  letter-spacing:1px;
+  text-shadow:0 0 15px rgba(0,200,255,0.6);
 }
 
 .container{
+  max-width:420px;
+  margin:auto;
   padding:20px;
 }
 
 .step{
   display:none;
-  animation:fade 0.4s ease-in-out;
+  animation:fade 0.4s ease;
 }
 
 .step.active{
@@ -50,57 +75,63 @@ body{
 }
 
 .card{
-  background:rgba(255,255,255,0.08);
-  backdrop-filter:blur(10px);
-  padding:15px;
-  border-radius:15px;
+  background:rgba(255,255,255,0.06);
+  backdrop-filter:blur(12px);
+  border-radius:18px;
+  padding:16px;
   margin-bottom:15px;
   cursor:pointer;
   transition:0.3s;
-  border:2px solid transparent;
+  border:1px solid rgba(255,255,255,0.1);
 }
 
 .card:hover{
-  border:2px solid #00cfff;
+  border:1px solid #00cfff;
+  box-shadow:0 0 20px rgba(0,200,255,0.4);
   transform:scale(1.02);
 }
 
 .card.selected{
-  border:2px solid #00cfff;
-  background:rgba(0,207,255,0.15);
+  border:1px solid #00cfff;
+  background:rgba(0,200,255,0.12);
+  box-shadow:0 0 25px rgba(0,200,255,0.5);
 }
 
 button{
   width:100%;
-  padding:15px;
+  padding:14px;
   border:none;
-  border-radius:12px;
-  margin-top:20px;
+  border-radius:15px;
   font-size:16px;
+  margin-top:20px;
   cursor:pointer;
   background:linear-gradient(90deg,#00cfff,#0077ff);
   color:white;
-  font-weight:bold;
+  font-weight:600;
+  letter-spacing:1px;
   transition:0.3s;
 }
 
 button:hover{
-  transform:scale(1.03);
+  box-shadow:0 0 20px rgba(0,200,255,0.6);
 }
 
 input{
   width:100%;
   padding:12px;
-  border-radius:10px;
+  border-radius:12px;
   border:none;
-  margin-bottom:10px;
+  margin-bottom:12px;
+  background:rgba(255,255,255,0.1);
+  color:white;
 }
 
 .total-box{
   background:rgba(255,255,255,0.08);
   padding:15px;
-  border-radius:12px;
+  border-radius:15px;
   margin-top:15px;
+  border:1px solid rgba(255,255,255,0.1);
 }
 
 </style>
@@ -109,64 +140,50 @@ input{
 <body>
 
 <div class="header">
-
-<!-- COLOQUE AQUI SUA LOGO -->
-<img src="logo.png" class="logo">
-
-<div class="titulo">
-Garagem Vmuka-Car<br>
-Estética Automotiva
-</div>
-
+<h1>Garagem Vmuka-Car</h1>
+<p>Estética Automotiva Premium 🚗✨</p>
 </div>
 
 <div class="container">
 
-<!-- ETAPA 1 -->
 <div class="step active" id="step1">
-<h3>Escolha os Serviços</h3>
-
-<div class="card" onclick="toggleServico(this,'Lavagem Simples',50)">
-<b>Lavagem Simples - R$50</b><br>
-Lavagem externa + rodas + secagem
-</div>
+<h3>Escolha seus serviços</h3>
 
 <div class="card" onclick="toggleServico(this,'Lavagem Premium',80)">
-<b>Lavagem Premium - R$80</b><br>
-Lavagem completa + pretinho + painel detalhado
+<b>Lavagem Premium</b><br>
+Lavagem completa + pretinho + cera líquida<br>
+💰 R$80
 </div>
 
-<div class="card" onclick="toggleServico(this,'Higienização Interna Completa',300)">
-<b>Higienização Completa - R$300</b><br>
-Bancos, carpete, teto, forro e porta-malas
+<div class="card" onclick="toggleServico(this,'Higienização Completa',300)">
+<b>Higienização Completa</b><br>
+Bancos, carpete, teto e forro<br>
+💰 R$300
 </div>
 
 <div class="card" onclick="toggleServico(this,'Polimento Técnico',450)">
-<b>Polimento Técnico - R$450</b><br>
-Remoção de riscos + brilho espelhado
+<b>Polimento Técnico</b><br>
+Remoção de riscos + brilho espelhado<br>
+💰 R$450
 </div>
 
-<button onclick="proximo(2)">Próximo</button>
+<button onclick="proximo(2)">Continuar</button>
 </div>
 
-<!-- ETAPA 2 -->
 <div class="step" id="step2">
-<h3>Escolha a Data</h3>
+<h3>Escolha a data</h3>
 <input type="date" id="data">
-<button onclick="proximo(3)">Próximo</button>
+<button onclick="proximo(3)">Continuar</button>
 </div>
 
-<!-- ETAPA 3 -->
 <div class="step" id="step3">
-<h3>Escolha o Horário</h3>
+<h3>Escolha o horário</h3>
 <div id="horarios"></div>
-<button onclick="proximo(4)">Próximo</button>
+<button onclick="proximo(4)">Continuar</button>
 </div>
 
-<!-- ETAPA 4 -->
 <div class="step" id="step4">
-<h3>Seus Dados</h3>
-
+<h3>Seus dados</h3>
 <input type="text" id="nome" placeholder="Seu nome">
 <input type="text" id="telefone" placeholder="Telefone">
 <input type="text" id="placa" placeholder="Placa do veículo">
@@ -180,19 +197,19 @@ Remoção de riscos + brilho espelhado
 
 <script>
 
-let servicos = [];
-let total = 0;
-let horarioSelecionado = "";
+let servicos=[];
+let total=0;
+let horarioSelecionado="";
 
 function toggleServico(el,nome,preco){
   el.classList.toggle("selected");
 
   if(servicos.includes(nome)){
-    servicos = servicos.filter(s=>s!==nome);
-    total -= preco;
-  } else {
+    servicos=servicos.filter(s=>s!==nome);
+    total-=preco;
+  }else{
     servicos.push(nome);
-    total += preco;
+    total+=preco;
   }
 }
 
@@ -204,8 +221,7 @@ function proximo(step){
   }
 
   if(step==3){
-    const data = document.getElementById("data").value;
-    if(!data){
+    if(!document.getElementById("data").value){
       alert("Escolha uma data");
       return;
     }
@@ -221,70 +237,45 @@ function proximo(step){
   document.getElementById("step"+step).classList.add("active");
 
   if(step==4){
-    document.getElementById("resumo").innerHTML = `
-    <b>Serviços:</b><br>${servicos.join("<br>")}<br><br>
-    <b>Total:</b> R$ ${total}
-    `;
+    document.getElementById("resumo").innerHTML=
+    `<b>Serviços:</b><br>${servicos.join("<br>")}<br><br>
+     <b>Total:</b> R$ ${total}`;
   }
 }
 
 function gerarHorarios(){
-  const div = document.getElementById("horarios");
-  div.innerHTML = "";
-
-  const horarios = ["08:00","09:00","10:00","14:00","15:00"];
-  const agendamentos = JSON.parse(localStorage.getItem("agendamentos")) || [];
-  const data = document.getElementById("data").value;
+  const div=document.getElementById("horarios");
+  div.innerHTML="";
+  const horarios=["08:00","09:00","10:00","14:00","15:00","16:00"];
 
   horarios.forEach(h=>{
-    const ocupado = agendamentos.find(a=>a.data==data && a.horario==h);
-
-    const card = document.createElement("div");
+    const card=document.createElement("div");
     card.className="card";
-    card.innerText = ocupado ? h+" (Indisponível)" : h;
-
-    if(!ocupado){
-      card.onclick = function(){
-        document.querySelectorAll("#horarios .card").forEach(c=>c.classList.remove("selected"));
-        card.classList.add("selected");
-        horarioSelecionado = h;
-      }
-    } else {
-      card.style.opacity="0.4";
+    card.innerText=h;
+    card.onclick=function(){
+      document.querySelectorAll("#horarios .card").forEach(c=>c.classList.remove("selected"));
+      card.classList.add("selected");
+      horarioSelecionado=h;
     }
-
     div.appendChild(card);
   });
 }
 
 function confirmar(){
 
-  const nome = document.getElementById("nome").value;
-  const telefone = document.getElementById("telefone").value;
-  const placa = document.getElementById("placa").value;
-  const data = document.getElementById("data").value;
+  const nome=document.getElementById("nome").value;
+  const telefone=document.getElementById("telefone").value;
+  const placa=document.getElementById("placa").value;
+  const data=document.getElementById("data").value;
 
-  if(!nome || !telefone || !placa){
+  if(!nome||!telefone||!placa){
     alert("Preencha todos os dados");
     return;
   }
 
-  let agendamentos = JSON.parse(localStorage.getItem("agendamentos")) || [];
+  const numero="5519991984539";
 
-  agendamentos.push({
-    nome,
-    telefone,
-    placa,
-    data,
-    horario:horarioSelecionado,
-    servicos,
-    total
-  });
-
-  localStorage.setItem("agendamentos",JSON.stringify(agendamentos));
-
-  const numero = "5519991984539";
-  const mensagem = `Olá, gostaria de confirmar:%0A
+  const mensagem=`Olá, gostaria de confirmar:%0A
 Nome: ${nome}%0A
 Serviços: ${servicos.join(", ")}%0A
 Data: ${data}%0A
@@ -292,8 +283,7 @@ Horário: ${horarioSelecionado}%0A
 Total: R$ ${total}`;
 
   window.open(`https://wa.me/${numero}?text=${mensagem}`);
-
-  alert("Agendamento realizado!");
+  alert("Agendamento enviado!");
   location.reload();
 }
 
