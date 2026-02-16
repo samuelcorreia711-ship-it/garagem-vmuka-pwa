@@ -10,31 +10,34 @@
 body{
   margin:0;
   font-family:'Segoe UI',sans-serif;
-  background:#050505;
+  background:#070707;
   color:white;
   overflow-x:hidden;
 }
 
-/* LOGO FUNDO ANIMADA */
+/* LOGO FUNDO DESTACADA */
 body::before{
   content:"";
   position:fixed;
   inset:0;
   background:url("logo.png") no-repeat center center;
-  background-size:500px;
-  opacity:0.30;
+  background-size:600px;
+  opacity:0.25;
   animation:respirar 6s ease-in-out infinite;
-  z-index:-2;
+  z-index:-1;
+  filter: drop-shadow(0 0 30px rgba(0,200,255,0.7));
+  
 }
 
-/* sem camada */
+/* Leve efeito azul premium */
 body::after{
   content:"";
   position:fixed;
   inset:0;
-  background:radial-gradient(circle at center, rgba(0,200,255,0.05), rgba(0,0,0,0.95));
-  z-index:-1;
+  background: radial-gradient(circle at center, rgba(0,200,255,0.08), transparent 60%);
+  z-index:-2;
 }
+  
 
 @keyframes respirar{
   0%{ transform:scale(1); opacity:0.08;}
@@ -291,6 +294,7 @@ Total: R$ ${total}`;
 
 </body>
 </html>
+
 
 
 
