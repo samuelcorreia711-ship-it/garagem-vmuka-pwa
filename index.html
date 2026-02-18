@@ -1,92 +1,109 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vmuka-Car Estética Automotiva</title>
+<title>Garagem Vmuka-Car</title>
 
 <style>
+
 body{
   margin:0;
-  font-family:Arial;
-  background:#000;
+  font-family:'Segoe UI',sans-serif;
+  background:#050505;
   color:white;
-  overflow-x:hidden;
 }
 
-/* LOGO FUNDO RESPIRANDO */
+/* LOGO FUNDO */
 .logo-bg{
   position:fixed;
   top:50%;
   left:50%;
-  transform:translate(-50%,-50%);
-  width:300px;
-  opacity:0.15;
-  animation:respirar 4s infinite ease-in-out;
+  transform:translate(-50%, -50%);
+  width:600px;
+  opacity:0.25;
   z-index:-1;
-  filter: drop-shadow(0 0 40px rgba(0,200,255,1));
+  animation:respirar 6s ease-in-out infinite;
+  filter: drop-shadow(0 0 60px rgba(0,200,255,0.8));
 }
 
 @keyframes respirar{
-  0%{transform:translate(-50%,-50%) scale(1);}
-  50%{transform:translate(-50%,-50%) scale(1.05);}
-  100%{transform:translate(-50%,-50%) scale(1);}
+  0%{ transform:translate(-50%, -50%) scale(1);}
+  50%{ transform:translate(-50%, -50%) scale(1.08);}
+  100%{ transform:translate(-50%, -50%) scale(1);}
+}
+
+.header{
+  text-align:center;
+  padding:30px 20px 10px;
+}
+
+.header h1{
+  color:#00cfff;
+  text-shadow:0 0 15px rgba(0,200,255,0.6);
 }
 
 .container{
+  max-width:420px;
+  margin:auto;
   padding:20px;
 }
 
 .card{
-  background:#111;
-  padding:15px;
+  background:rgba(255,255,255,0.07);
+  border-radius:18px;
+  padding:16px;
   margin-bottom:15px;
-  border-radius:12px;
-  border:1px solid rgba(0,200,255,0.3);
+  cursor:pointer;
+  transition:0.3s;
+  border:1px solid rgba(255,255,255,0.1);
 }
 
-.card h3{
-  margin:0;
-  cursor:pointer;
+.card:hover{
+  border:1px solid #00cfff;
+  box-shadow:0 0 20px rgba(0,200,255,0.4);
+}
+
+.card.selected{
+  border:1px solid #00cfff;
+  background:rgba(0,200,255,0.12);
 }
 
 button{
-  padding:10px;
-  border:none;
-  border-radius:8px;
-  cursor:pointer;
-  margin-top:10px;
-  background:linear-gradient(135deg,#00cfff,#0077ff);
-  color:white;
   width:100%;
+  padding:14px;
+  border:none;
+  border-radius:15px;
+  font-size:16px;
+  margin-top:15px;
+  background:linear-gradient(90deg,#00cfff,#0077ff);
+  color:white;
+  cursor:pointer;
 }
 
-.total{
-  font-size:18px;
+input, select{
+  width:100%;
+  padding:12px;
+  border-radius:12px;
+  border:none;
+  margin-bottom:12px;
+  background:rgba(255,255,255,0.1);
+  color:white;
+}
+
+.total-box{
+  background:rgba(255,255,255,0.08);
+  padding:15px;
+  border-radius:15px;
   margin-top:15px;
 }
 
-select{
-  width:100%;
-  padding:8px;
-  margin-top:10px;
-  border-radius:8px;
+.horario.ocupado{
+  background:#400;
+  pointer-events:none;
+  opacity:0.5;
 }
 
-#musicBtn{
-  position:fixed;
-  bottom:20px;
-  right:20px;
-  width:55px;
-  height:55px;
-  border-radius:50%;
-  border:none;
-  font-size:20px;
-  background:linear-gradient(135deg,#00cfff,#0077ff);
-  color:white;
-  cursor:pointer;
-  box-shadow:0 0 20px rgba(0,200,255,0.7);
-}
 </style>
 </head>
 
@@ -94,159 +111,149 @@ select{
 
 <img src="logo.png" class="logo-bg">
 
+<div class="header">
+<h1>Garagem Vmuka-Car</h1>
+<p>Estética Automotiva & Motos 🚗🏍️</p>
+</div>
+
 <div class="container">
 
-<h2>💎 Escolha seus Serviços</h2>
+<h3>Escolha os Serviços</h3>
 
-<div id="servicos"></div>
-
-<div class="total">
-Total: R$ <span id="valorTotal">0</span>
+<div class="card" onclick="toggleServico(this,'Lavagem Simples',40)">
+Lavagem Simples - R$40
 </div>
 
-<h3>📅 Escolher Data e Horário</h3>
-<input type="date" id="data">
-
-<select id="horario">
-<option value="">Selecione Horário</option>
-<option>08:00</option>
-<option>10:00</option>
-<option>13:00</option>
-<option>15:00</option>
-<option>17:00</option>
-</select>
-
-<button onclick="agendar()">Confirmar Agendamento</button>
-
+<div class="card" onclick="toggleServico(this,'Lavagem Premium',80)">
+Lavagem Premium - R$80
 </div>
 
-<!-- Música -->
-<audio id="bgMusic" loop>
-  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3" type="audio/mpeg">
-</audio>
+<div class="card" onclick="toggleServico(this,'Polimento Técnico',450)">
+Polimento Técnico - R$450
+</div>
 
-<button id="musicBtn" onclick="toggleMusic()">🔊</button>
+<div class="card" onclick="toggleServico(this,'Higienização Completa',300)">
+Higienização Completa - R$300
+</div>
+
+<div class="card" onclick="toggleServico(this,'Estética Moto Completa',150)">
+Estética Moto Completa - R$150
+</div>
+
+<h3>Escolha a Data</h3>
+<input type="date" id="data" onchange="gerarHorarios()">
+
+<h3>Escolha o Horário</h3>
+<div id="horarios"></div>
+
+<h3>Seus Dados</h3>
+<input type="text" id="nome" placeholder="Nome">
+<input type="text" id="telefone" placeholder="Telefone">
+<input type="text" id="veiculo" placeholder="Veículo">
+
+<div class="total-box" id="resumo"></div>
+
+<button onclick="confirmar()">Confirmar Agendamento</button>
+
+</div>
 
 <script>
 
-const listaServicos = [
-  {
-    nome:"Lavagem Simples",
-    descricao:"Lavagem externa + pneus + secagem.",
-    preco:50
-  },
-  {
-    nome:"Lavagem Premium",
-    descricao:"Lavagem completa + cera + limpeza interna.",
-    preco:120
-  },
-  {
-    nome:"Polimento Comercial",
-    descricao:"Remoção de riscos leves + brilho intenso.",
-    preco:300
-  },
-  {
-    nome:"Higienização Interna Completa",
-    descricao:"Bancos + carpete + teto + painel detalhado.",
-    preco:250
-  },
-  {
-    nome:"Estética para Motos",
-    descricao:"Lavagem detalhada + brilho + proteção.",
-    preco:80
+let servicos=[];
+let total=0;
+let horarioSelecionado="";
+
+function toggleServico(el,nome,preco){
+  el.classList.toggle("selected");
+
+  if(servicos.includes(nome)){
+    servicos=servicos.filter(s=>s!==nome);
+    total-=preco;
+  }else{
+    servicos.push(nome);
+    total+=preco;
   }
-];
 
-let selecionados = [];
+  atualizarResumo();
+}
 
-function carregarServicos(){
-  const div = document.getElementById("servicos");
-  listaServicos.forEach((s,i)=>{
-    div.innerHTML += `
-      <div class="card">
-        <h3 onclick="toggleDesc(${i})">${s.nome} - R$ ${s.preco}</h3>
-        <div id="desc${i}" style="display:none">
-          <p>${s.descricao}</p>
-          <button onclick="addServico(${i})">Adicionar</button>
-        </div>
-      </div>
-    `;
+function atualizarResumo(){
+  document.getElementById("resumo").innerHTML=
+  `<b>Serviços:</b><br>${servicos.join("<br>")}<br><br>
+   <b>Total:</b> R$ ${total}`;
+}
+
+function gerarHorarios(){
+  const div=document.getElementById("horarios");
+  div.innerHTML="";
+  const data=document.getElementById("data").value;
+  if(!data) return;
+
+  const horarios=["08:00","09:00","10:00","14:00","15:00","16:00","17:00","18:00"];
+
+  const agendamentos=JSON.parse(localStorage.getItem("agendamentos"))||[];
+
+  horarios.forEach(h=>{
+    const card=document.createElement("div");
+    card.className="card horario";
+    card.innerText=h;
+
+    const ocupado=agendamentos.find(a=>a.data==data && a.horario==h);
+    if(ocupado){
+      card.classList.add("ocupado");
+      card.innerText=h+" (Ocupado)";
+    }else{
+      card.onclick=function(){
+        document.querySelectorAll(".horario").forEach(c=>c.classList.remove("selected"));
+        card.classList.add("selected");
+        horarioSelecionado=h;
+      }
+    }
+
+    div.appendChild(card);
   });
 }
 
-function toggleDesc(i){
-  const d = document.getElementById("desc"+i);
-  d.style.display = d.style.display=="none" ? "block" : "none";
-}
+function confirmar(){
 
-function addServico(i){
-  selecionados.push(listaServicos[i]);
-  atualizarTotal();
-}
+  const nome=document.getElementById("nome").value;
+  const telefone=document.getElementById("telefone").value;
+  const veiculo=document.getElementById("veiculo").value;
+  const data=document.getElementById("data").value;
 
-function atualizarTotal(){
-  let total = 0;
-  selecionados.forEach(s=> total += s.preco);
-  document.getElementById("valorTotal").innerText = total;
-}
-
-function bloquearHorario(data, horario){
-  const agendamentos = JSON.parse(localStorage.getItem("agendamentos")) || [];
-  return agendamentos.some(a => a.data==data && a.horario==horario);
-}
-
-function agendar(){
-  const data = document.getElementById("data").value;
-  const horario = document.getElementById("horario").value;
-
-  if(!data || !horario){
-    alert("Escolha data e horário");
+  if(!nome||!telefone||!veiculo||!data||!horarioSelecionado||servicos.length==0){
+    alert("Preencha tudo corretamente");
     return;
   }
 
-  if(bloquearHorario(data,horario)){
-    alert("Horário já está ocupado!");
-    return;
-  }
+  const diaSemana=new Date(data+"T00:00").toLocaleDateString('pt-BR',{weekday:'long'});
+  const dataFormatada=new Date(data+"T00:00").toLocaleDateString('pt-BR');
 
-  const agendamentos = JSON.parse(localStorage.getItem("agendamentos")) || [];
+  let agendamentos=JSON.parse(localStorage.getItem("agendamentos"))||[];
+  agendamentos.push({data:data,horario:horarioSelecionado});
+  localStorage.setItem("agendamentos",JSON.stringify(agendamentos));
 
-  agendamentos.push({
-    data,
-    horario,
-    servicos: selecionados
-  });
+  const numero="5519991984539";
 
-  localStorage.setItem("agendamentos", JSON.stringify(agendamentos));
+  const mensagem=`🚗 NOVO AGENDAMENTO 🚗
+Nome: ${nome}
+Telefone: ${telefone}
+Veículo: ${veiculo}
 
-  alert("Agendamento realizado com sucesso!");
+Serviços:
+${servicos.join(", ")}
+
+Data: ${diaSemana} - ${dataFormatada}
+Horário: ${horarioSelecionado}
+
+Total: R$ ${total}`;
+
+  window.open(`https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`);
+  alert("Agendamento confirmado!");
   location.reload();
 }
-
-/* Música */
-const music = document.getElementById("bgMusic");
-music.volume = 0.25;
-https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3
-
-document.body.addEventListener("click", function iniciar(){
-  music.play();
-  document.body.removeEventListener("click", iniciar);
-});
-
-function toggleMusic(){
-  if(music.paused){
-    music.play();
-    musicBtn.innerHTML="🔊";
-  } else{
-    music.pause();
-    musicBtn.innerHTML="🔇";
-  }
-}
-
-carregarServicos();
 
 </script>
 
 </body>
 </html>
-
