@@ -2,111 +2,146 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Painel Admin - Vmuka</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel Admin - Vmuka-Car</title>
+
 <style>
+
 body{
-  font-family: Arial;
-  background:#111;
+  margin:0;
+  font-family:'Segoe UI',sans-serif;
+  background:#050505;
   color:white;
   padding:20px;
 }
-.card{
-  background:#222;
-  padding:15px;
-  margin-bottom:15px;
-  border-radius:10px;
+
+h1{
+  text-align:center;
+  color:#00cfff;
 }
+
+.card{
+  background:rgba(255,255,255,0.07);
+  padding:15px;
+  border-radius:15px;
+  margin-bottom:15px;
+  border:1px solid rgba(255,255,255,0.1);
+}
+
 button{
   padding:8px 12px;
   border:none;
-  border-radius:8px;
+  border-radius:10px;
   cursor:pointer;
-  margin-top:10px;
+  margin-top:8px;
 }
+
 .liberar{
   background:#00cfff;
 }
-.limpar{
-  background:red;
+
+.excluir{
+  background:#ff4444;
   color:white;
 }
+
+.whats{
+  background:#25D366;
+  color:white;
+}
+
+.login{
+  max-width:300px;
+  margin:100px auto;
+  text-align:center;
+}
+
+input{
+  width:100%;
+  padding:10px;
+  border-radius:10px;
+  border:none;
+  margin-top:10px;
+}
+
 </style>
 </head>
 
 <body>
 
-<h2>💎 Painel Administrativo</h2>
+<div id="loginArea" class="login">
+<h2>🔒 Painel Administrativo</h2>
+<input type="password" id="senha" placeholder="Digite a senha">
+<button onclick="entrar()">Entrar</button>
+</div>
 
+<div id="painel" style="display:none;">
+<h1>💎 Agendamentos Vmuka-Car</h1>
 <div id="lista"></div>
-
-<button class="limpar" onclick="limparTudo()">Limpar Todos Agendamentos</button>
+<button onclick="limparTudo()" class="excluir">Limpar Todos</button>
+</div>
 
 <script>
 
-function carregar() {
-  const listaDiv = document.getElementById("lista");
-  const agendamentos = JSON.parse(localStorage.getItem("agendamentos")) || [];
+const SENHA_CORRETA = "1234"; // você pode mudar
 
-  listaDiv.innerHTML = "";
-
-  agendamentos.forEach((ag, index) => {
-
-    listaDiv.innerHTML += `
-      <div class="card">
-        <b>${ag.nome}</b><br>
-        ${ag.dia} - ${ag.horario}<br>
-        <button class="liberar" onclick="liberar(${index})">
-          Liberar Horário
-        </button>
-      </div>
-    `;
-  });
-}function gerarLinkGoogle(dia, horario, nome){
-
-  const dataBase = new Date();
-  const diasSemana = {
-    "Segunda-feira":1,
-    "Terça-feira":2,
-    "Quarta-feira":3,
-    "Quinta-feira":4,
-    "Sexta-feira":5,
-    "Sábado":6
-  };
-
-  const hoje = dataBase.getDay();
-  const alvo = diasSemana[dia];
-
-  let diff = alvo - hoje;
-  if(diff < 0) diff += 7;
-
-  dataBase.setDate(dataBase.getDate()+diff);
-
-  const [hora, minuto] = horario.split(":");
-
-  dataBase.setHours(hora);
-  dataBase.setMinutes(minuto);
-
-  const inicio = dataBase.toISOString().replace(/-|:|\.\d+/g,"");
-  dataBase.setHours(dataBase.getHours()+2);
-  const fim = dataBase.toISOString().replace(/-|:|\.\d+/g,"");
-
-  return `https://www.google.com/calendar/render?action=TEMPLATE&text=Agendamento Vmuka-Car - ${nome}&dates=${inicio}/${fim}&details=Serviço agendado via app&sf=true&output=xml`;
+function entrar(){
+  const senha = document.getElementById("senha").value;
+  if(senha === SENHA_CORRETA){
+    document.getElementById("loginArea").style.display="none";
+    document.getElementById("painel").style.display="block";
+    carregar();
+  }else{
+    alert("Senha incorreta");
+  }
 }
 
+function carregar(){
+  const listaDiv=document.getElementById("lista");
+  const agendamentos=JSON.parse(localStorage.getItem("agendamentos"))||[];
+
+  listaDiv.innerHTML="";
+
+  if(agendamentos.length===0){
+    listaDiv.innerHTML="<p>Nenhum agendamento</p>";
+    return;
+  }
+
+  agendamentos.forEach((ag,index)=>{
+
+    listaDiv.innerHTML+=`
+    <div class="card">
+      <b>${ag.data}</b> - ${ag.horario}<br><br>
+
+      <button class="liberar" onclick="liberar(${index})">
+        Liberar Horário
+      </button>
+
+      <button class="excluir" onclick="excluir(${index})">
+        Excluir
+      </button>
+    </div>
+    `;
+  });
+}
 
 function liberar(index){
-  let agendamentos = JSON.parse(localStorage.getItem("agendamentos")) || [];
+  let agendamentos=JSON.parse(localStorage.getItem("agendamentos"))||[];
   agendamentos.splice(index,1);
-  localStorage.setItem("agendamentos", JSON.stringify(agendamentos));
+  localStorage.setItem("agendamentos",JSON.stringify(agendamentos));
   carregar();
+}
+
+function excluir(index){
+  liberar(index);
 }
 
 function limparTudo(){
-  localStorage.removeItem("agendamentos");
-  carregar();
+  if(confirm("Deseja apagar todos agendamentos?")){
+    localStorage.removeItem("agendamentos");
+    carregar();
+  }
 }
-
-carregar();
 
 </script>
 
