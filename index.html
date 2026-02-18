@@ -1,147 +1,248 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Painel Admin - Vmuka-Car</title>
+<title>Vmuka-Car Estética Automotiva</title>
 
 <style>
-
 body{
   margin:0;
-  font-family:'Segoe UI',sans-serif;
-  background:#050505;
+  font-family:Arial;
+  background:#000;
   color:white;
+  overflow-x:hidden;
+}
+
+/* LOGO FUNDO RESPIRANDO */
+.logo-bg{
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  width:300px;
+  opacity:0.15;
+  animation:respirar 4s infinite ease-in-out;
+  z-index:-1;
+  filter: drop-shadow(0 0 40px rgba(0,200,255,1));
+}
+
+@keyframes respirar{
+  0%{transform:translate(-50%,-50%) scale(1);}
+  50%{transform:translate(-50%,-50%) scale(1.05);}
+  100%{transform:translate(-50%,-50%) scale(1);}
+}
+
+.container{
   padding:20px;
 }
 
-h1{
-  text-align:center;
-  color:#00cfff;
+.card{
+  background:#111;
+  padding:15px;
+  margin-bottom:15px;
+  border-radius:12px;
+  border:1px solid rgba(0,200,255,0.3);
 }
 
-.card{
-  background:rgba(255,255,255,0.07);
-  padding:15px;
-  border-radius:15px;
-  margin-bottom:15px;
-  border:1px solid rgba(255,255,255,0.1);
+.card h3{
+  margin:0;
+  cursor:pointer;
 }
 
 button{
-  padding:8px 12px;
-  border:none;
-  border-radius:10px;
-  cursor:pointer;
-  margin-top:8px;
-}
-
-.liberar{
-  background:#00cfff;
-}
-
-.excluir{
-  background:#ff4444;
-  color:white;
-}
-
-.whats{
-  background:#25D366;
-  color:white;
-}
-
-.login{
-  max-width:300px;
-  margin:100px auto;
-  text-align:center;
-}
-
-input{
-  width:100%;
   padding:10px;
-  border-radius:10px;
   border:none;
+  border-radius:8px;
+  cursor:pointer;
   margin-top:10px;
+  background:linear-gradient(135deg,#00cfff,#0077ff);
+  color:white;
+  width:100%;
 }
 
+.total{
+  font-size:18px;
+  margin-top:15px;
+}
+
+select{
+  width:100%;
+  padding:8px;
+  margin-top:10px;
+  border-radius:8px;
+}
+
+#musicBtn{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  width:55px;
+  height:55px;
+  border-radius:50%;
+  border:none;
+  font-size:20px;
+  background:linear-gradient(135deg,#00cfff,#0077ff);
+  color:white;
+  cursor:pointer;
+  box-shadow:0 0 20px rgba(0,200,255,0.7);
+}
 </style>
 </head>
 
 <body>
 
-<div id="loginArea" class="login">
-<h2>🔒 Painel Administrativo</h2>
-<input type="password" id="senha" placeholder="Digite a senha">
-<button onclick="entrar()">Entrar</button>
+<img src="logo.png" class="logo-bg">
+
+<div class="container">
+
+<h2>💎 Escolha seus Serviços</h2>
+
+<div id="servicos"></div>
+
+<div class="total">
+Total: R$ <span id="valorTotal">0</span>
 </div>
 
-<div id="painel" style="display:none;">
-<h1>💎 Agendamentos Vmuka-Car</h1>
-<div id="lista"></div>
-<button onclick="limparTudo()" class="excluir">Limpar Todos</button>
+<h3>📅 Escolher Data e Horário</h3>
+<input type="date" id="data">
+
+<select id="horario">
+<option value="">Selecione Horário</option>
+<option>08:00</option>
+<option>10:00</option>
+<option>13:00</option>
+<option>15:00</option>
+<option>17:00</option>
+</select>
+
+<button onclick="agendar()">Confirmar Agendamento</button>
+
 </div>
+
+<!-- Música -->
+<audio id="bgMusic" loop>
+  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3" type="audio/mpeg">
+</audio>
+
+<button id="musicBtn" onclick="toggleMusic()">🔊</button>
 
 <script>
 
-const SENHA_CORRETA = "1234"; // você pode mudar
-
-function entrar(){
-  const senha = document.getElementById("senha").value;
-  if(senha === SENHA_CORRETA){
-    document.getElementById("loginArea").style.display="none";
-    document.getElementById("painel").style.display="block";
-    carregar();
-  }else{
-    alert("Senha incorreta");
+const listaServicos = [
+  {
+    nome:"Lavagem Simples",
+    descricao:"Lavagem externa + pneus + secagem.",
+    preco:50
+  },
+  {
+    nome:"Lavagem Premium",
+    descricao:"Lavagem completa + cera + limpeza interna.",
+    preco:120
+  },
+  {
+    nome:"Polimento Comercial",
+    descricao:"Remoção de riscos leves + brilho intenso.",
+    preco:300
+  },
+  {
+    nome:"Higienização Interna Completa",
+    descricao:"Bancos + carpete + teto + painel detalhado.",
+    preco:250
+  },
+  {
+    nome:"Estética para Motos",
+    descricao:"Lavagem detalhada + brilho + proteção.",
+    preco:80
   }
-}
+];
 
-function carregar(){
-  const listaDiv=document.getElementById("lista");
-  const agendamentos=JSON.parse(localStorage.getItem("agendamentos"))||[];
+let selecionados = [];
 
-  listaDiv.innerHTML="";
-
-  if(agendamentos.length===0){
-    listaDiv.innerHTML="<p>Nenhum agendamento</p>";
-    return;
-  }
-
-  agendamentos.forEach((ag,index)=>{
-
-    listaDiv.innerHTML+=`
-    <div class="card">
-      <b>${ag.data}</b> - ${ag.horario}<br><br>
-
-      <button class="liberar" onclick="liberar(${index})">
-        Liberar Horário
-      </button>
-
-      <button class="excluir" onclick="excluir(${index})">
-        Excluir
-      </button>
-    </div>
+function carregarServicos(){
+  const div = document.getElementById("servicos");
+  listaServicos.forEach((s,i)=>{
+    div.innerHTML += `
+      <div class="card">
+        <h3 onclick="toggleDesc(${i})">${s.nome} - R$ ${s.preco}</h3>
+        <div id="desc${i}" style="display:none">
+          <p>${s.descricao}</p>
+          <button onclick="addServico(${i})">Adicionar</button>
+        </div>
+      </div>
     `;
   });
 }
 
-function liberar(index){
-  let agendamentos=JSON.parse(localStorage.getItem("agendamentos"))||[];
-  agendamentos.splice(index,1);
-  localStorage.setItem("agendamentos",JSON.stringify(agendamentos));
-  carregar();
+function toggleDesc(i){
+  const d = document.getElementById("desc"+i);
+  d.style.display = d.style.display=="none" ? "block" : "none";
 }
 
-function excluir(index){
-  liberar(index);
+function addServico(i){
+  selecionados.push(listaServicos[i]);
+  atualizarTotal();
 }
 
-function limparTudo(){
-  if(confirm("Deseja apagar todos agendamentos?")){
-    localStorage.removeItem("agendamentos");
-    carregar();
+function atualizarTotal(){
+  let total = 0;
+  selecionados.forEach(s=> total += s.preco);
+  document.getElementById("valorTotal").innerText = total;
+}
+
+function bloquearHorario(data, horario){
+  const agendamentos = JSON.parse(localStorage.getItem("agendamentos")) || [];
+  return agendamentos.some(a => a.data==data && a.horario==horario);
+}
+
+function agendar(){
+  const data = document.getElementById("data").value;
+  const horario = document.getElementById("horario").value;
+
+  if(!data || !horario){
+    alert("Escolha data e horário");
+    return;
+  }
+
+  if(bloquearHorario(data,horario)){
+    alert("Horário já está ocupado!");
+    return;
+  }
+
+  const agendamentos = JSON.parse(localStorage.getItem("agendamentos")) || [];
+
+  agendamentos.push({
+    data,
+    horario,
+    servicos: selecionados
+  });
+
+  localStorage.setItem("agendamentos", JSON.stringify(agendamentos));
+
+  alert("Agendamento realizado com sucesso!");
+  location.reload();
+}
+
+/* Música */
+const music = document.getElementById("bgMusic");
+music.volume = 0.25;
+
+document.body.addEventListener("click", function iniciar(){
+  music.play();
+  document.body.removeEventListener("click", iniciar);
+});
+
+function toggleMusic(){
+  if(music.paused){
+    music.play();
+    musicBtn.innerHTML="🔊";
+  } else{
+    music.pause();
+    musicBtn.innerHTML="🔇";
   }
 }
+
+carregarServicos();
 
 </script>
 
