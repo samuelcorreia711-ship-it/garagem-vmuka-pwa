@@ -1,167 +1,147 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Garagem Vmuka-Car</title>
+<title>Painel Admin - Vmuka-Car</title>
 
 <style>
+
 body{
   margin:0;
-  font-family: Arial, sans-serif;
-  background:#111;
+  font-family:'Segoe UI',sans-serif;
+  background:#050505;
   color:white;
-  text-align:center;
-}
-
-header{
-  background:#1e88e5;
-  padding:15px;
-  font-size:22px;
-  font-weight:bold;
-}
-
-.container{
   padding:20px;
 }
 
+h1{
+  text-align:center;
+  color:#00cfff;
+}
+
 .card{
-  background:#222;
+  background:rgba(255,255,255,0.07);
   padding:15px;
-  margin:15px 0;
-  border-radius:10px;
+  border-radius:15px;
+  margin-bottom:15px;
+  border:1px solid rgba(255,255,255,0.1);
 }
 
 button{
-  background:#1e88e5;
+  padding:8px 12px;
   border:none;
-  padding:10px 15px;
-  color:white;
-  border-radius:5px;
-  font-weight:bold;
+  border-radius:10px;
   cursor:pointer;
+  margin-top:8px;
 }
 
-input, select{
-  padding:8px;
-  margin:5px;
-  border-radius:5px;
+.liberar{
+  background:#00cfff;
+}
+
+.excluir{
+  background:#ff4444;
+  color:white;
+}
+
+.whats{
+  background:#25D366;
+  color:white;
+}
+
+.login{
+  max-width:300px;
+  margin:100px auto;
+  text-align:center;
+}
+
+input{
+  width:100%;
+  padding:10px;
+  border-radius:10px;
   border:none;
+  margin-top:10px;
 }
 
-.agendado{
-  background:red;
-}
 </style>
 </head>
 
 <body>
 
-<header>🚗 Garagem Vmuka-Car</header>
-
-<div class="container">
-
-<h2>Serviços Disponíveis</h2>
-
-<div class="card">
-  <h3>🟡 Plataforma Cera Premium</h3>
-  <p>Duração: 2 horas</p>
-  <p>Valor: R$ 150</p>
+<div id="loginArea" class="login">
+<h2>🔒 Painel Administrativo</h2>
+<input type="password" id="senha" placeholder="Digite a senha">
+<button onclick="entrar()">Entrar</button>
 </div>
 
-<div class="card">
-  <h3>🚿 Lavagem Simples</h3>
-  <p>Duração: 1 hora</p>
-  <p>Valor: R$ 60</p>
-</div>
-
-<div class="card">
-  <h3>🏍️ Estética para Moto</h3>
-  <p>Duração: 1h30</p>
-  <p>Valor: R$ 80</p>
-</div>
-
-<hr>
-
-<h2>Agendamento</h2>
-
-<input type="text" id="nome" placeholder="Seu nome"><br>
-<input type="text" id="placa" placeholder="Placa do veículo"><br>
-
-<select id="servico">
-  <option value="120">Plataforma Cera Premium (2h)</option>
-  <option value="60">Lavagem Simples (1h)</option>
-  <option value="90">Estética para Moto (1h30)</option>
-</select><br>
-
-<input type="date" id="data"><br>
-
-<select id="hora"></select><br>
-
-<button onclick="agendar()">Agendar</button>
-
-<h3>Horários do Dia</h3>
-<div id="listaHorarios"></div>
-
+<div id="painel" style="display:none;">
+<h1>💎 Agendamentos Vmuka-Car</h1>
+<div id="lista"></div>
+<button onclick="limparTudo()" class="excluir">Limpar Todos</button>
 </div>
 
 <script>
 
-let horariosDisponiveis = [
-  8,9,10,11,13,14,15,16,17
-];
+const SENHA_CORRETA = "1234"; // você pode mudar
 
-let agendamentos = {};
+function entrar(){
+  const senha = document.getElementById("senha").value;
+  if(senha === SENHA_CORRETA){
+    document.getElementById("loginArea").style.display="none";
+    document.getElementById("painel").style.display="block";
+    carregar();
+  }else{
+    alert("Senha incorreta");
+  }
+}
 
-function carregarHorarios(){
-  const select = document.getElementById("hora");
-  const lista = document.getElementById("listaHorarios");
-  select.innerHTML="";
-  lista.innerHTML="";
+function carregar(){
+  const listaDiv=document.getElementById("lista");
+  const agendamentos=JSON.parse(localStorage.getItem("agendamentos"))||[];
 
-  horariosDisponiveis.forEach(h=>{
-    let option = document.createElement("option");
-    option.value = h;
-    option.text = h+":00";
-    select.appendChild(option);
+  listaDiv.innerHTML="";
 
-    let div = document.createElement("div");
-    div.innerText = h+":00";
-    div.id = "h"+h;
+  if(agendamentos.length===0){
+    listaDiv.innerHTML="<p>Nenhum agendamento</p>";
+    return;
+  }
 
-    if(agendamentos[h]){
-      div.classList.add("agendado");
-      div.innerText += " - Ocupado";
-    }
+  agendamentos.forEach((ag,index)=>{
 
-    lista.appendChild(div);
+    listaDiv.innerHTML+=`
+    <div class="card">
+      <b>${ag.data}</b> - ${ag.horario}<br><br>
+
+      <button class="liberar" onclick="liberar(${index})">
+        Liberar Horário
+      </button>
+
+      <button class="excluir" onclick="excluir(${index})">
+        Excluir
+      </button>
+    </div>
+    `;
   });
 }
 
-function agendar(){
-  let nome = document.getElementById("nome").value;
-  let placa = document.getElementById("placa").value;
-  let duracao = parseInt(document.getElementById("servico").value);
-  let horaInicio = parseInt(document.getElementById("hora").value);
-
-  let blocos = duracao/60;
-
-  for(let i=0;i<blocos;i++){
-    if(agendamentos[horaInicio+i]){
-      alert("Horário já ocupado!");
-      return;
-    }
-  }
-
-  for(let i=0;i<blocos;i++){
-    agendamentos[horaInicio+i] = true;
-  }
-
-  alert("Agendamento confirmado, "+nome+"!");
-  carregarHorarios();
+function liberar(index){
+  let agendamentos=JSON.parse(localStorage.getItem("agendamentos"))||[];
+  agendamentos.splice(index,1);
+  localStorage.setItem("agendamentos",JSON.stringify(agendamentos));
+  carregar();
 }
 
-carregarHorarios();
+function excluir(index){
+  liberar(index);
+}
+
+function limparTudo(){
+  if(confirm("Deseja apagar todos agendamentos?")){
+    localStorage.removeItem("agendamentos");
+    carregar();
+  }
+}
 
 </script>
 
