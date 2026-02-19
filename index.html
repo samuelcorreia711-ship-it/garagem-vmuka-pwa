@@ -3,121 +3,247 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Garagem Vmuka</title>
+<title>Vmuka-Car Estética Automotiva</title>
 
 <style>
-body {
+body{
   margin:0;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+  font-family:Arial;
+  background:#000;
   color:white;
+  overflow-x:hidden;
 }
 
-.container {
+/* LOGO FUNDO RESPIRANDO */
+.logo-bg{
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  width:300px;
+  opacity:0.15;
+  animation:respirar 4s infinite ease-in-out;
+  z-index:-1;
+  filter: drop-shadow(0 0 40px rgba(0,200,255,1));
+}
+
+@keyframes respirar{
+  0%{transform:translate(-50%,-50%) scale(1);}
+  50%{transform:translate(-50%,-50%) scale(1.05);}
+  100%{transform:translate(-50%,-50%) scale(1);}
+}
+
+.container{
   padding:20px;
 }
 
-.card {
-  background: rgba(255,255,255,0.1);
-  backdrop-filter: blur(10px);
-  padding:20px;
-  border-radius:15px;
+.card{
+  background:#111;
+  padding:15px;
   margin-bottom:15px;
+  border-radius:12px;
+  border:1px solid rgba(0,200,255,0.3);
 }
 
-input, select {
-  width:100%;
-  padding:12px;
-  margin-bottom:10px;
+.card h3{
+  margin:0;
+  cursor:pointer;
+}
+
+button{
+  padding:10px;
   border:none;
+  border-radius:8px;
+  cursor:pointer;
+  margin-top:10px;
+  background:linear-gradient(135deg,#00cfff,#0077ff);
+  color:white;
+  width:100%;
+}
+
+.total{
+  font-size:18px;
+  margin-top:15px;
+}
+
+select{
+  width:100%;
+  padding:8px;
+  margin-top:10px;
   border-radius:8px;
 }
 
-button {
-  width:100%;
-  padding:15px;
+#musicBtn{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  width:55px;
+  height:55px;
+  border-radius:50%;
   border:none;
-  border-radius:10px;
-  background:#00c6ff;
+  font-size:20px;
+  background:linear-gradient(135deg,#00cfff,#0077ff);
   color:white;
-  font-weight:bold;
-  font-size:16px;
-}
-
-h1 {
-  text-align:center;
+  cursor:pointer;
+  box-shadow:0 0 20px rgba(0,200,255,0.7);
 }
 </style>
 </head>
 
 <body>
 
+<img src="logo.png" class="logo-bg">
+
 <div class="container">
-  <h1>Garagem Vmuka</h1>
 
-  <div class="card">
-    <h3>Agendar Serviço</h3>
+<h2>💎 Escolha seus Serviços</h2>
 
-    <input type="text" id="nome" placeholder="Nome do Cliente">
-    <input type="text" id="telefone" placeholder="Telefone">
-    
-    <select id="tipoVeiculo">
-      <option>Carro</option>
-      <option>Moto</option>
-    </select>
+<div id="servicos"></div>
 
-    <select id="servico">
-      <option>Lavagem Simples</option>
-      <option>Lavagem Completa</option>
-      <option>Polimento</option>
-      <option>Vitrificação</option>
-      <option>Higienização Interna</option>
-    </select>
+<div class="total">
+Total: R$ <span id="valorTotal">0</span>
+</div>
 
-    <input type="date" id="data">
-    <input type="time" id="hora">
+<h3>📅 Escolher Data e Horário</h3>
+<input type="date" id="data">
 
-    <button onclick="agendar()">Agendar</button>
-  </div>
+<select id="horario">
+<option value="">Selecione Horário</option>
+<option>08:00</option>
+<option>10:00</option>
+<option>13:00</option>
+<option>15:00</option>
+<option>17:00</option>
+</select>
 
-  <div class="card">
-    <h3>Pagamento</h3>
-    <a href="https://mpago.la/SEULINK" target="_blank">
-      <button>Pagar Agora</button>
-    </a>
-  </div>
+<button onclick="agendar()">Confirmar Agendamento</button>
 
 </div>
 
+<!-- Música -->
+<audio id="bgMusic" loop>
+  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3" type="audio/mpeg">
+</audio>
+
+<button id="musicBtn" onclick="toggleMusic()">🔊</button>
+
 <script>
-function agendar() {
 
-  let nome = document.getElementById("nome").value;
-  let telefone = document.getElementById("telefone").value;
-  let tipo = document.getElementById("tipoVeiculo").value;
-  let servico = document.getElementById("servico").value;
-  let data = document.getElementById("data").value;
-  let hora = document.getElementById("hora").value;
+const listaServicos = [
+  {
+    nome:"Lavagem Simples",
+    descricao:"Lavagem externa + pneus + secagem.",
+    preco:50
+  },
+  {
+    nome:"Lavagem Premium",
+    descricao:"Lavagem completa + cera + limpeza interna.",
+    preco:120
+  },
+  {
+    nome:"Polimento Comercial",
+    descricao:"Remoção de riscos leves + brilho intenso.",
+    preco:300
+  },
+  {
+    nome:"Higienização Interna Completa",
+    descricao:"Bancos + carpete + teto + painel detalhado.",
+    preco:250
+  },
+  {
+    nome:"Estética para Motos",
+    descricao:"Lavagem detalhada + brilho + proteção.",
+    preco:80
+  }
+];
 
-  if(!nome || !telefone || !data || !hora){
-    alert("Preencha todos os campos");
+let selecionados = [];
+
+function carregarServicos(){
+  const div = document.getElementById("servicos");
+  listaServicos.forEach((s,i)=>{
+    div.innerHTML += `
+      <div class="card">
+        <h3 onclick="toggleDesc(${i})">${s.nome} - R$ ${s.preco}</h3>
+        <div id="desc${i}" style="display:none">
+          <p>${s.descricao}</p>
+          <button onclick="addServico(${i})">Adicionar</button>
+        </div>
+      </div>
+    `;
+  });
+}
+
+function toggleDesc(i){
+  const d = document.getElementById("desc"+i);
+  d.style.display = d.style.display=="none" ? "block" : "none";
+}
+
+function addServico(i){
+  selecionados.push(listaServicos[i]);
+  atualizarTotal();
+}
+
+function atualizarTotal(){
+  let total = 0;
+  selecionados.forEach(s=> total += s.preco);
+  document.getElementById("valorTotal").innerText = total;
+}
+
+function bloquearHorario(data, horario){
+  const agendamentos = JSON.parse(localStorage.getItem("agendamentos")) || [];
+  return agendamentos.some(a => a.data==data && a.horario==horario);
+}
+
+function agendar(){
+  const data = document.getElementById("data").value;
+  const horario = document.getElementById("horario").value;
+
+  if(!data || !horario){
+    alert("Escolha data e horário");
     return;
   }
 
-  let agendamentos = JSON.parse(localStorage.getItem("agendamentos")) || [];
-
-  // Bloqueio de horário
-  let horarioOcupado = agendamentos.find(a => a.data === data && a.hora === hora);
-  if(horarioOcupado){
-    alert("Horário já agendado!");
+  if(bloquearHorario(data,horario)){
+    alert("Horário já está ocupado!");
     return;
   }
 
-  agendamentos.push({nome, telefone, tipo, servico, data, hora});
+  const agendamentos = JSON.parse(localStorage.getItem("agendamentos")) || [];
+
+  agendamentos.push({
+    data,
+    horario,
+    servicos: selecionados
+  });
+
   localStorage.setItem("agendamentos", JSON.stringify(agendamentos));
 
   alert("Agendamento realizado com sucesso!");
+  location.reload();
 }
+
+/* Música */
+const music = document.getElementById("bgMusic");
+music.volume = 0.25;
+
+document.body.addEventListener("click", function iniciar(){
+  music.play();
+  document.body.removeEventListener("click", iniciar);
+});
+
+function toggleMusic(){
+  if(music.paused){
+    music.play();
+    musicBtn.innerHTML="🔊";
+  } else{
+    music.pause();
+    musicBtn.innerHTML="🔇";
+  }
+}
+
+carregarServicos();
+
 </script>
 
 </body>
