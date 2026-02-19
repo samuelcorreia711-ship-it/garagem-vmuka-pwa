@@ -6,7 +6,6 @@
 <title>Garagem Vmuka-Car</title>
 
 <style>
-
 body{
   margin:0;
   font-family:'Segoe UI',sans-serif;
@@ -14,14 +13,13 @@ body{
   color:white;
 }
 
-/* LOGO FUNDO */
 .logo-bg{
   position:fixed;
   top:50%;
   left:50%;
   transform:translate(-50%, -50%);
-  width:600px;
-  opacity:0.25;
+  width:500px;
+  opacity:0.18;
   z-index:-1;
   animation:respirar 6s ease-in-out infinite;
   filter: drop-shadow(0 0 60px rgba(0,200,255,0.8));
@@ -29,18 +27,8 @@ body{
 
 @keyframes respirar{
   0%{ transform:translate(-50%, -50%) scale(1);}
-  50%{ transform:translate(-50%, -50%) scale(1.08);}
+  50%{ transform:translate(-50%, -50%) scale(1.05);}
   100%{ transform:translate(-50%, -50%) scale(1);}
-}
-
-.header{
-  text-align:center;
-  padding:30px 20px 10px;
-}
-
-.header h1{
-  color:#00cfff;
-  text-shadow:0 0 15px rgba(0,200,255,0.6);
 }
 
 .container{
@@ -49,19 +37,20 @@ body{
   padding:20px;
 }
 
+h1{
+  text-align:center;
+  color:#00cfff;
+  text-shadow:0 0 15px rgba(0,200,255,0.6);
+}
+
 .card{
   background:rgba(255,255,255,0.07);
   border-radius:18px;
   padding:16px;
-  margin-bottom:15px;
+  margin-bottom:12px;
   cursor:pointer;
-  transition:0.3s;
   border:1px solid rgba(255,255,255,0.1);
-}
-
-.card:hover{
-  border:1px solid #00cfff;
-  box-shadow:0 0 20px rgba(0,200,255,0.4);
+  transition:0.3s;
 }
 
 .card.selected{
@@ -69,19 +58,13 @@ body{
   background:rgba(0,200,255,0.12);
 }
 
-button{
-  width:100%;
-  padding:14px;
-  border:none;
-  border-radius:15px;
-  font-size:16px;
-  margin-top:15px;
-  background:linear-gradient(90deg,#00cfff,#0077ff);
-  color:white;
-  cursor:pointer;
+.card.ocupado{
+  background:#400;
+  opacity:0.6;
+  pointer-events:none;
 }
 
-input, select{
+input{
   width:100%;
   padding:12px;
   border-radius:12px;
@@ -91,19 +74,23 @@ input, select{
   color:white;
 }
 
+button{
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:15px;
+  margin-top:15px;
+  background:linear-gradient(90deg,#00cfff,#0077ff);
+  color:white;
+  cursor:pointer;
+}
+
 .total-box{
   background:rgba(255,255,255,0.08);
   padding:15px;
   border-radius:15px;
   margin-top:15px;
 }
-
-.horario.ocupado{
-  background:#400;
-  pointer-events:none;
-  opacity:0.5;
-}
-
 </style>
 </head>
 
@@ -111,37 +98,20 @@ input, select{
 
 <img src="logo.png" class="logo-bg">
 
-<div class="header">
-<h1>Garagem Vmuka-Car</h1>
-<p>Estética Automotiva & Motos 🚗🏍️</p>
-</div>
-
 <div class="container">
+
+<h1>Garagem Vmuka-Car</h1>
 
 <h3>Escolha os Serviços</h3>
 
-<div class="card" onclick="toggleServico(this,'Lavagem Simples',40)">
-Lavagem Simples - R$40
-</div>
-
-<div class="card" onclick="toggleServico(this,'Lavagem Premium',80)">
-Lavagem Premium - R$80
-</div>
-
-<div class="card" onclick="toggleServico(this,'Polimento Técnico',450)">
-Polimento Técnico - R$450
-</div>
-
-<div class="card" onclick="toggleServico(this,'Higienização Completa',300)">
-Higienização Completa - R$300
-</div>
-
-<div class="card" onclick="toggleServico(this,'Estética Moto Completa',150)">
-Estética Moto Completa - R$150
-</div>
+<div class="card" onclick="toggleServico(this,'Lavagem Simples',40)">Lavagem Simples - R$40</div>
+<div class="card" onclick="toggleServico(this,'Lavagem Premium',80)">Lavagem Premium - R$80</div>
+<div class="card" onclick="toggleServico(this,'Polimento Técnico',450)">Polimento Técnico - R$450</div>
+<div class="card" onclick="toggleServico(this,'Higienização Completa',300)">Higienização Completa - R$300</div>
+<div class="card" onclick="toggleServico(this,'Estética Moto Completa',150)">Estética Moto Completa - R$150</div>
 
 <h3>Escolha a Data</h3>
-<input type="date" id="data" onchange="gerarHorarios()">
+<input type="date" id="data" onchange="carregarHorarios()">
 
 <h3>Escolha o Horário</h3>
 <div id="horarios"></div>
@@ -157,56 +127,80 @@ Estética Moto Completa - R$150
 
 </div>
 
-<script>
+<script type="module">
 
-let servicos=[];
-let total=0;
-let horarioSelecionado="";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDPxY2iFVIiIXWR4Ifs_LyEEFomQ2GXEHQ",
+  authDomain: "vmuka-car.firebaseapp.com",
+  projectId: "vmuka-car",
+  storageBucket: "vmuka-car.firebasestorage.app",
+  messagingSenderId: "579735247484",
+  appId: "1:579735247484:web:1914724d154ff543e447f9"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+let servicos = [];
+let total = 0;
+let horarioSelecionado = "";
 
 function toggleServico(el,nome,preco){
   el.classList.toggle("selected");
 
   if(servicos.includes(nome)){
-    servicos=servicos.filter(s=>s!==nome);
-    total-=preco;
-  }else{
+    servicos = servicos.filter(s=>s!==nome);
+    total -= preco;
+  } else {
     servicos.push(nome);
-    total+=preco;
+    total += preco;
   }
 
   atualizarResumo();
 }
 
 function atualizarResumo(){
-  document.getElementById("resumo").innerHTML=
+  document.getElementById("resumo").innerHTML =
   `<b>Serviços:</b><br>${servicos.join("<br>")}<br><br>
    <b>Total:</b> R$ ${total}`;
 }
 
-function gerarHorarios(){
-  const div=document.getElementById("horarios");
-  div.innerHTML="";
-  const data=document.getElementById("data").value;
+async function carregarHorarios(){
+
+  const data = document.getElementById("data").value;
+  const div = document.getElementById("horarios");
+  div.innerHTML = "";
+
   if(!data) return;
 
-  const horarios=["08:00","09:00","10:00","14:00","15:00","16:00","17:00","18:00"];
+  const horarios = ["08:00","09:00","10:00","14:00","15:00","16:00","17:00","18:00"];
 
-  const agendamentos=JSON.parse(localStorage.getItem("agendamentos"))||[];
+  const snapshot = await getDocs(collection(db,"agendamentos"));
+  const ocupados = [];
+
+  snapshot.forEach(doc=>{
+    const ag = doc.data();
+    if(ag.data === data){
+      ocupados.push(ag.horario);
+    }
+  });
 
   horarios.forEach(h=>{
-    const card=document.createElement("div");
-    card.className="card horario";
-    card.innerText=h;
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerText = h;
 
-    const ocupado=agendamentos.find(a=>a.data==data && a.horario==h);
-    if(ocupado){
+    if(ocupados.includes(h)){
       card.classList.add("ocupado");
-      card.innerText=h+" (Ocupado)";
-    }else{
-      card.onclick=function(){
-        document.querySelectorAll(".horario").forEach(c=>c.classList.remove("selected"));
+      card.innerText += " (Ocupado)";
+    } else {
+      card.onclick = function(){
+        document.querySelectorAll("#horarios .card").forEach(c=>c.classList.remove("selected"));
         card.classList.add("selected");
-        horarioSelecionado=h;
+        horarioSelecionado = h;
       }
     }
 
@@ -214,41 +208,41 @@ function gerarHorarios(){
   });
 }
 
-function confirmar(){
+async function confirmar(){
 
-  const nome=document.getElementById("nome").value;
-  const telefone=document.getElementById("telefone").value;
-  const veiculo=document.getElementById("veiculo").value;
-  const data=document.getElementById("data").value;
+  const nome = document.getElementById("nome").value;
+  const telefone = document.getElementById("telefone").value;
+  const veiculo = document.getElementById("veiculo").value;
+  const data = document.getElementById("data").value;
 
-  if(!nome||!telefone||!veiculo||!data||!horarioSelecionado||servicos.length==0){
+  if(!nome || !telefone || !veiculo || !data || !horarioSelecionado || servicos.length===0){
     alert("Preencha tudo corretamente");
     return;
   }
 
-  const diaSemana=new Date(data+"T00:00").toLocaleDateString('pt-BR',{weekday:'long'});
-  const dataFormatada=new Date(data+"T00:00").toLocaleDateString('pt-BR');
+  await addDoc(collection(db,"agendamentos"),{
+    nome,
+    telefone,
+    veiculo,
+    servicos,
+    total,
+    data,
+    horario:horarioSelecionado
+  });
 
-  let agendamentos=JSON.parse(localStorage.getItem("agendamentos"))||[];
-  agendamentos.push({data:data,horario:horarioSelecionado});
-  localStorage.setItem("agendamentos",JSON.stringify(agendamentos));
+  const numero = "5519991984539";
 
-  const numero="5519991984539";
-
-  const mensagem=`🚗 NOVO AGENDAMENTO 🚗
+  const mensagem =
+`🚗 NOVO AGENDAMENTO 🚗
 Nome: ${nome}
-Telefone: ${telefone}
 Veículo: ${veiculo}
-
-Serviços:
-${servicos.join(", ")}
-
-Data: ${diaSemana} - ${dataFormatada}
+Serviços: ${servicos.join(", ")}
+Data: ${data}
 Horário: ${horarioSelecionado}
-
 Total: R$ ${total}`;
 
   window.open(`https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`);
+
   alert("Agendamento confirmado!");
   location.reload();
 }
@@ -257,4 +251,3 @@ Total: R$ ${total}`;
 
 </body>
 </html>
-
