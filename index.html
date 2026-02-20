@@ -18,7 +18,7 @@ body{
   top:50%;
   left:50%;
   transform:translate(-50%, -50%);
-  width:500px;
+  width:480px;
   opacity:0.18;
   z-index:-1;
   animation:respirar 6s ease-in-out infinite;
@@ -104,14 +104,10 @@ button{
 
 <h3>Escolha os Serviços</h3>
 
-<div class="card" onclick="toggleServico(this,'Lavagem Simples',40)">Lavagem Simples - R$40</div>
-<div class="card" onclick="toggleServico(this,'Lavagem Premium',80)">Lavagem Premium - R$80</div>
-<div class="card" onclick="toggleServico(this,'Polimento Técnico',450)">Polimento Técnico - R$450</div>
-<div class="card" onclick="toggleServico(this,'Higienização Completa',300)">Higienização Completa - R$300</div>
-<div class="card" onclick="toggleServico(this,'Estética Moto Completa',150)">Estética Moto Completa - R$150</div>
+<div id="listaServicos"></div>
 
 <h3>Escolha a Data</h3>
-<input type="date" id="data" onchange="carregarHorarios()">
+<input type="date" id="data">
 
 <h3>Escolha o Horário</h3>
 <div id="horarios"></div>
@@ -123,7 +119,7 @@ button{
 
 <div class="total-box" id="resumo"></div>
 
-<button onclick="confirmar()">Confirmar Agendamento</button>
+<button id="btnConfirmar">Confirmar Agendamento</button>
 
 </div>
 
@@ -144,35 +140,57 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+const servicosDisponiveis = [
+  {nome:"Lavagem Simples", preco:40},
+  {nome:"Lavagem Premium", preco:80},
+  {nome:"Polimento Técnico", preco:450},
+  {nome:"Higienização Completa", preco:300},
+  {nome:"Estética Moto Completa", preco:150}
+];
+
 let servicos = [];
 let total = 0;
 let horarioSelecionado = "";
 
-function toggleServico(el,nome,preco){
-  el.classList.toggle("selected");
+const listaDiv = document.getElementById("listaServicos");
+const resumoDiv = document.getElementById("resumo");
+const horariosDiv = document.getElementById("horarios");
 
-  if(servicos.includes(nome)){
-    servicos = servicos.filter(s=>s!==nome);
-    total -= preco;
-  } else {
-    servicos.push(nome);
-    total += preco;
-  }
+servicosDisponiveis.forEach(s=>{
+  const card = document.createElement("div");
+  card.className="card";
+  card.innerHTML=`${s.nome} - R$${s.preco}`;
 
-  atualizarResumo();
-}
+  card.addEventListener("click", ()=>{
+    card.classList.toggle("selected");
+
+    if(servicos.includes(s.nome)){
+      servicos = servicos.filter(n=>n!==s.nome);
+      total -= s.preco;
+    } else {
+      servicos.push(s.nome);
+      total += s.preco;
+    }
+
+    atualizarResumo();
+  });
+
+  listaDiv.appendChild(card);
+});
 
 function atualizarResumo(){
-  document.getElementById("resumo").innerHTML =
+  resumoDiv.innerHTML =
   `<b>Serviços:</b><br>${servicos.join("<br>")}<br><br>
    <b>Total:</b> R$ ${total}`;
 }
 
+document.getElementById("data").addEventListener("change", carregarHorarios);
+
 async function carregarHorarios(){
 
   const data = document.getElementById("data").value;
-  const div = document.getElementById("horarios");
-  div.innerHTML = "";
+  horariosDiv.innerHTML="";
+  horarioSelecionado="";
 
   if(!data) return;
 
@@ -190,23 +208,25 @@ async function carregarHorarios(){
 
   horarios.forEach(h=>{
     const card = document.createElement("div");
-    card.className = "card";
-    card.innerText = h;
+    card.className="card";
+    card.innerText=h;
 
     if(ocupados.includes(h)){
       card.classList.add("ocupado");
-      card.innerText += " (Ocupado)";
+      card.innerText+=" (Ocupado)";
     } else {
-      card.onclick = function(){
+      card.addEventListener("click", ()=>{
         document.querySelectorAll("#horarios .card").forEach(c=>c.classList.remove("selected"));
         card.classList.add("selected");
-        horarioSelecionado = h;
-      }
+        horarioSelecionado=h;
+      });
     }
 
-    div.appendChild(card);
+    horariosDiv.appendChild(card);
   });
 }
+
+document.getElementById("btnConfirmar").addEventListener("click", confirmar);
 
 async function confirmar(){
 
@@ -230,9 +250,9 @@ async function confirmar(){
     horario:horarioSelecionado
   });
 
-  const numero = "5519991984539";
+  const numero="5519991984539";
 
-  const mensagem =
+  const mensagem=
 `🚗 NOVO AGENDAMENTO 🚗
 Nome: ${nome}
 Veículo: ${veiculo}
