@@ -173,13 +173,29 @@ Estética Moto Completa - R$150
 <!-- BOTÃO WHATSAPP -->
 <a class="whatsapp" href="https://wa.me/5519991984539" target="_blank">💬</a>
 
-<script>
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, query, where } 
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "SUA_API_KEY",
+  authDomain: "vmuka-car.firebaseapp.com",
+  projectId: "vmuka-car",
+  storageBucket: "vmuka-car.firebasestorage.app",
+  messagingSenderId: "579735247484",
+  appId: "1:579735247484:web:1914724d154ff543e447f9"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 let servicos=[];
 let total=0;
 let horarioSelecionado="";
 
-function toggleServico(el,nome,preco){
+window.toggleServico=function(el,nome,preco){
   el.classList.toggle("selected");
 
   if(servicos.includes(nome)){
@@ -198,22 +214,28 @@ function atualizarResumo(){
   "<b>Serviços:</b><br>"+servicos.join("<br>")+"<br><br><b>Total:</b> R$ "+total;
 }
 
-function gerarHorarios(){
+window.gerarHorarios=async function(){
   const div=document.getElementById("horarios");
   div.innerHTML="";
   const data=document.getElementById("data").value;
   if(!data) return;
 
   const horarios=["08:00","09:00","10:00","14:00","15:00","16:00","17:00","18:00"];
-  const agendamentos=JSON.parse(localStorage.getItem("agendamentos"))||[];
+
+  const q=query(collection(db,"Agendamentos"),where("data","==",data));
+  const snapshot=await getDocs(q);
+
+  let ocupados=[];
+  snapshot.forEach(doc=>{
+    ocupados.push(doc.data().horario);
+  });
 
   horarios.forEach(h=>{
     const card=document.createElement("div");
     card.className="card horario";
     card.innerText=h;
 
-    const ocupado=agendamentos.find(a=>a.data==data && a.horario==h);
-    if(ocupado){
+    if(ocupados.includes(h)){
       card.classList.add("ocupado");
       card.innerText=h+" (Ocupado)";
     }else{
@@ -228,7 +250,7 @@ function gerarHorarios(){
   });
 }
 
-function confirmar(){
+window.confirmar=async function(){
 
   const nome=document.getElementById("nome").value;
   const telefone=document.getElementById("telefone").value;
@@ -239,6 +261,18 @@ function confirmar(){
     alert("Preencha tudo corretamente");
     return;
   }
+
+  await addDoc(collection(db,"Agendamentos"),{
+    nome,
+    telefone,
+    veiculo,
+    data,
+    horario:horarioSelecionado,
+    servicos,
+    total,
+    status:"pendente",
+    criadoEm:new Date()
+  });
 
   const numero="5519991984539";
 
@@ -256,17 +290,10 @@ Horário: ${horarioSelecionado}
 
 Total: R$ ${total}`;
 
-  let agendamentos=JSON.parse(localStorage.getItem("agendamentos"))||[];
-  agendamentos.push({data:data,horario:horarioSelecionado});
-  localStorage.setItem("agendamentos",JSON.stringify(agendamentos));
-
   window.open(`https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`);
-  alert("Agendamento confirmado!");
+
+  alert("Agendamento salvo no sistema!");
   location.reload();
 }
 
 </script>
-
-</body>
-</html>
-
