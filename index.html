@@ -3,180 +3,705 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Garagem Vmuka-Car</title>
+<title>Garagem Vmuka-Car | Estética Automotiva</title>
 
 <style>
-body{
-  margin:0;
-  font-family:'Segoe UI',sans-serif;
-  background:#050505;
-  color:white;
-  overflow-x:hidden;
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap');
+
+:root {
+  --primary: #00cfff;
+  --secondary: #0077ff;
+  --accent: #ff006e;
+  --dark: #050505;
+  --gray: #1a1a1a;
+  --success: #00f5d4;
+  --warning: #ffbe0b;
+  --danger: #ff006e;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Rajdhani', sans-serif;
+  background: var(--dark);
+  color: white;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* BACKGROUND ANIMADO */
+.bg-animation {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -2;
+  background: 
+    radial-gradient(circle at 20% 50%, rgba(0, 207, 255, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(0, 119, 255, 0.1) 0%, transparent 50%);
+  animation: bgPulse 8s ease-in-out infinite;
+}
+
+@keyframes bgPulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* GRID TECNOLÓGICO */
+.grid-lines {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(rgba(0, 207, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 207, 255, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  z-index: -1;
+  pointer-events: none;
 }
 
 /* LOGO FUNDO */
-.logo-bg{
-  position:fixed;
-  top:50%;
-  left:50%;
-  transform:translate(-50%, -50%);
-  width:550px;
-  opacity:0.18;
-  z-index:-1;
-  animation:respirar 6s ease-in-out infinite;
-  filter: drop-shadow(0 0 80px rgba(0,200,255,0.9));
+.logo-bg {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 500px;
+  opacity: 0.12;
+  z-index: -1;
+  animation: respirar 6s ease-in-out infinite;
+  filter: drop-shadow(0 0 60px rgba(0, 207, 255, 0.8));
 }
 
-@keyframes respirar{
-  0%{ transform:translate(-50%, -50%) scale(1);}
-  50%{ transform:translate(-50%, -50%) scale(1.08);}
-  100%{ transform:translate(-50%, -50%) scale(1);}
+@keyframes respirar {
+  0% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.05); }
+  100% { transform: translate(-50%, -50%) scale(1); }
 }
 
-.header{
-  text-align:center;
-  padding:25px;
+/* HEADER PREMIUM */
+.header {
+  text-align: center;
+  padding: 40px 20px;
+  background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, transparent 100%);
+  border-bottom: 1px solid rgba(0, 207, 255, 0.2);
+  position: relative;
 }
 
-.header h1{
-  color:#00cfff;
-  text-shadow:0 0 15px rgba(0,200,255,0.6);
+.header::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--primary), transparent);
+  box-shadow: 0 0 10px var(--primary);
 }
 
-.container{
-  max-width:420px;
-  margin:auto;
-  padding:20px;
+.header h1 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2.5rem;
+  color: var(--primary);
+  text-shadow: 0 0 20px rgba(0, 207, 255, 0.6);
+  letter-spacing: 3px;
+  margin-bottom: 10px;
+  text-transform: uppercase;
 }
 
-.card{
-  background:rgba(255,255,255,0.07);
-  border-radius:18px;
-  padding:16px;
-  margin-bottom:15px;
-  cursor:pointer;
-  transition:0.3s;
-  border:1px solid rgba(255,255,255,0.1);
+.header p {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 1px;
 }
 
-.card:hover{
-  border:1px solid #00cfff;
-  box-shadow:0 0 20px rgba(0,200,255,0.4);
+/* CONTAINER */
+.container {
+  max-width: 480px;
+  margin: auto;
+  padding: 20px;
+  padding-bottom: 100px;
 }
 
-.card.selected{
-  border:1px solid #00cfff;
-  background:rgba(0,200,255,0.12);
+/* SEÇÕES */
+.section-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.1rem;
+  color: var(--primary);
+  margin: 25px 0 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-input{
-  width:100%;
-  padding:12px;
-  border-radius:12px;
-  border:none;
-  margin-bottom:12px;
-  background:rgba(255,255,255,0.1);
-  color:white;
+.section-title::before {
+  content: '';
+  width: 4px;
+  height: 20px;
+  background: var(--primary);
+  box-shadow: 0 0 10px var(--primary);
 }
 
-button{
-  width:100%;
-  padding:14px;
-  border:none;
-  border-radius:15px;
-  margin-top:15px;
-  background:linear-gradient(90deg,#00cfff,#0077ff);
-  color:white;
-  font-weight:bold;
-  cursor:pointer;
+/* CARDS DE SERVIÇO */
+.card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 18px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  position: relative;
+  overflow: hidden;
 }
 
-.horario.ocupado{
-  background:#400;
-  pointer-events:none;
-  opacity:0.5;
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 207, 255, 0.1), transparent);
+  transition: left 0.5s;
+}
+
+.card:hover::before {
+  left: 100%;
+}
+
+.card:hover {
+  border-color: rgba(0, 207, 255, 0.4);
+  transform: translateX(5px);
+  box-shadow: 0 5px 20px rgba(0, 207, 255, 0.2);
+}
+
+.card.selected {
+  border-color: var(--primary);
+  background: linear-gradient(135deg, rgba(0, 207, 255, 0.15) 0%, rgba(0, 119, 255, 0.05) 100%);
+  box-shadow: 0 0 20px rgba(0, 207, 255, 0.3);
+}
+
+.card.selected::after {
+  content: '✓';
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  color: var(--success);
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.service-name {
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.service-price {
+  color: var(--primary);
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.2rem;
+}
+
+.service-desc {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.4;
+}
+
+/* INPUTS ESTILIZADOS */
+.input-group {
+  position: relative;
+  margin-bottom: 15px;
+}
+
+input, select {
+  width: 100%;
+  padding: 15px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1rem;
+  transition: all 0.3s;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 15px rgba(0, 207, 255, 0.2);
+  background: rgba(0, 207, 255, 0.05);
+}
+
+input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* HORÁRIOS */
+.horarios-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.horario-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 12px 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.horario-card:hover:not(.ocupado) {
+  border-color: var(--primary);
+  background: rgba(0, 207, 255, 0.1);
+}
+
+.horario-card.selected {
+  background: var(--primary);
+  color: var(--dark);
+  border-color: var(--primary);
+  box-shadow: 0 0 15px rgba(0, 207, 255, 0.5);
+}
+
+.horario-card.ocupado {
+  background: rgba(255, 0, 0, 0.1);
+  border-color: rgba(255, 0, 0, 0.3);
+  color: rgba(255, 255, 255, 0.3);
+  cursor: not-allowed;
+  position: relative;
+}
+
+.horario-card.ocupado::after {
+  content: '✕';
+  position: absolute;
+  top: 2px;
+  right: 5px;
+  font-size: 0.7rem;
+  color: var(--danger);
+}
+
+/* RESUMO DO AGENDAMENTO */
+.resumo-box {
+  background: linear-gradient(135deg, rgba(0, 207, 255, 0.1) 0%, rgba(0, 119, 255, 0.05) 100%);
+  border: 1px solid rgba(0, 207, 255, 0.3);
+  border-radius: 16px;
+  padding: 20px;
+  margin: 20px 0;
+  backdrop-filter: blur(10px);
+}
+
+.resumo-title {
+  font-family: 'Orbitron', sans-serif;
+  color: var(--primary);
+  margin-bottom: 15px;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 1px solid rgba(0, 207, 255, 0.2);
+  padding-bottom: 10px;
+}
+
+.resumo-item {
+  display: flex;
+  justify-content: space-between;
+  margin: 8px 0;
+  font-size: 0.95rem;
+}
+
+.resumo-item.servicos {
+  flex-direction: column;
+  gap: 5px;
+}
+
+.resumo-item.servicos span {
+  color: rgba(255, 255, 255, 0.8);
+  padding-left: 10px;
+  border-left: 2px solid var(--primary);
+}
+
+.resumo-total {
+  border-top: 1px solid rgba(0, 207, 255, 0.3);
+  margin-top: 15px;
+  padding-top: 15px;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--primary);
+  font-family: 'Orbitron', sans-serif;
+}
+
+/* BOTÃO CONFIRMAR */
+.btn-confirmar {
+  width: 100%;
+  padding: 18px;
+  border: none;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  color: white;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 207, 255, 0.3);
+}
+
+.btn-confirmar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transition: left 0.6s;
+}
+
+.btn-confirmar:hover::before {
+  left: 100%;
+}
+
+.btn-confirmar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(0, 207, 255, 0.5);
+}
+
+.btn-confirmar:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* LOADING */
+.loading {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease-in-out infinite;
+  margin-left: 10px;
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
 /* BOTÃO WHATSAPP FLUTUANTE */
-.whatsapp{
-  position:fixed;
-  bottom:20px;
-  right:20px;
-  background:#25D366;
-  width:60px;
-  height:60px;
-  border-radius:50%;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  font-size:28px;
-  text-decoration:none;
-  color:white;
-  box-shadow:0 0 20px rgba(0,0,0,0.4);
+.whatsapp {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  background: #25D366;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 28px;
+  text-decoration: none;
+  color: white;
+  box-shadow: 0 5px 20px rgba(37, 211, 102, 0.4);
+  transition: all 0.3s;
+  z-index: 1000;
+  animation: pulse 2s infinite;
 }
-.whatsapp:hover{
-  transform:scale(1.1);
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 5px 20px rgba(37, 211, 102, 0.4); }
+  50% { box-shadow: 0 5px 30px rgba(37, 211, 102, 0.7); }
+}
+
+.whatsapp:hover {
+  transform: scale(1.1) rotate(10deg);
+}
+
+/* MODAL DE SUCESSO */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 2000;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(5px);
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal-content {
+  background: var(--gray);
+  border: 1px solid var(--primary);
+  border-radius: 20px;
+  padding: 40px;
+  text-align: center;
+  max-width: 90%;
+  width: 400px;
+  box-shadow: 0 0 50px rgba(0, 207, 255, 0.3);
+  animation: modalIn 0.3s ease-out;
+}
+
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.modal-icon {
+  font-size: 60px;
+  margin-bottom: 20px;
+  color: var(--success);
+  animation: iconPop 0.5s ease-out;
+}
+
+@keyframes iconPop {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.modal-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.5rem;
+  color: var(--primary);
+  margin-bottom: 15px;
+}
+
+.modal-text {
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 25px;
+  line-height: 1.6;
+}
+
+.modal-btn {
+  background: var(--primary);
+  color: var(--dark);
+  border: none;
+  padding: 12px 30px;
+  border-radius: 25px;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.modal-btn:hover {
+  box-shadow: 0 0 20px rgba(0, 207, 255, 0.5);
+  transform: scale(1.05);
+}
+
+/* ADMIN PANEL */
+.admin-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 8px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  opacity: 0.6;
+  transition: all 0.3s;
+  z-index: 100;
+}
+
+.admin-toggle:hover {
+  opacity: 1;
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+/* RESPONSIVO */
+@media (max-width: 480px) {
+  .header h1 {
+    font-size: 1.8rem;
+  }
+  
+  .horarios-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .logo-bg {
+    width: 350px;
+  }
+}
+
+/* ANIMAÇÃO DE ENTRADA */
+.fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 </style>
 </head>
 
 <body>
 
-<img src="logo.png" class="logo-bg">
+<div class="bg-animation"></div>
+<div class="grid-lines"></div>
+
+<img src="logo.png" class="logo-bg" alt="Vmuka-Car Logo">
+
+<button class="admin-toggle" onclick="toggleAdmin()">⚙️ Admin</button>
 
 <div class="header">
-<h1>Garagem Vmuka-Car</h1>
-<p>Estética Automotiva & Motos 🚗🏍️</p>
+  <h1>Garagem Vmuka-Car</h1>
+  <p>Estética Automotiva & Motos Premium 🚗🏍️</p>
 </div>
 
 <div class="container">
 
-<h3>Escolha os Serviços</h3>
+  <!-- SEÇÃO DE SERVIÇOS -->
+  <div class="fade-in">
+    <h3 class="section-title">Escolha os Serviços</h3>
+    
+    <div class="card" onclick="toggleServico(this, 'Lavagem Simples', 40)">
+      <div class="service-name">
+        <span>🧽 Lavagem Simples</span>
+        <span class="service-price">R$80</span>
+      </div>
+      <div class="service-desc">Limpeza externa básica com cera líquida</div>
+    </div>
 
-<div class="card" onclick="toggleServico(this,'Lavagem Simples',40)">
-Lavagem Simples - R$40
-</div>
+    <div class="card" onclick="toggleServico(this, 'Lavagem Premium', 80)">
+      <div class="service-name">
+        <span>✨ Lavagem Premium</span>
+        <span class="service-price">R$150</span>
+      </div>
+      <div class="service-desc">Limpeza completa + aspiração + painel</div>
+    </div>
 
-<div class="card" onclick="toggleServico(this,'Lavagem Premium',80)">
-Lavagem Premium - R$80
-</div>
+    <div class="card" onclick="toggleServico(this, 'Polimento Técnico', 450)">
+      <div class="service-name">
+        <span>🔮 Polimento Técnico</span>
+        <span class="service-price">R$850</span>
+      </div>
+      <div class="service-desc">Correção de pintura e revitalização do brilho</div>
+    </div>
 
-<div class="card" onclick="toggleServico(this,'Polimento Técnico',450)">
-Polimento Técnico - R$450
-</div>
+    <div class="card" onclick="toggleServico(this, 'Higienização Completa', 300)">
+      <div class="service-name">
+        <span>🛋️ Higienização Completa</span>
+        <span class="service-price">R$450</span>
+      </div>
+      <div class="service-desc">Limpeza profunda de estofados e carpetes</div>
+    </div>
 
-<div class="card" onclick="toggleServico(this,'Higienização Completa',300)">
-Higienização Completa - R$300
-</div>
+    <div class="card" onclick="toggleServico(this, 'Estética Moto Completa', 150)">
+      <div class="service-name">
+        <span>🏍️ Estética Moto Completa</span>
+        <span class="service-price">R$150</span>
+      </div>
+      <div class="service-desc">Lavagem detalhada + polimento de carenagens</div>
+    </div>
+  </div>
 
-<div class="card" onclick="toggleServico(this,'Estética Moto Completa',150)">
-Estética Moto Completa - R$150
-</div>
+  <!-- SEÇÃO DE DATA -->
+  <div class="fade-in">
+    <h3 class="section-title">Escolha a Data</h3>
+    <div class="input-group">
+      <input type="date" id="data" onchange="gerarHorarios()" min="">
+    </div>
+  </div>
 
-<h3>Escolha a Data</h3>
-<input type="date" id="data" onchange="gerarHorarios()">
+  <!-- SEÇÃO DE HORÁRIOS -->
+  <div class="fade-in" id="horariosSection" style="display: none;">
+    <h3 class="section-title">Escolha o Horário</h3>
+    <div class="horarios-grid" id="horarios"></div>
+  </div>
 
-<h3>Escolha o Horário</h3>
-<div id="horarios"></div>
+  <!-- SEÇÃO DE DADOS -->
+  <div class="fade-in">
+    <h3 class="section-title">Seus Dados</h3>
+    <div class="input-group">
+      <input type="text" id="nome" placeholder="Nome completo" oninput="atualizarResumo()">
+    </div>
+    <div class="input-group">
+      <input type="tel" id="telefone" placeholder="WhatsApp (com DDD)" oninput="mascaraTelefone(this); atualizarResumo()">
+    </div>
+    <div class="input-group">
+      <input type="text" id="veiculo" placeholder="Modelo do veículo (ex: BMW X5)" oninput="atualizarResumo()">
+    </div>
+  </div>
 
-<h3>Seus Dados</h3>
-<input type="text" id="nome" placeholder="Nome">
-<input type="text" id="telefone" placeholder="Telefone">
-<input type="text" id="veiculo" placeholder="Veículo">
+  <!-- RESUMO -->
+  <div class="resumo-box" id="resumoBox" style="display: none;">
+    <div class="resumo-title">📋 Resumo do Agendamento</div>
+    <div id="resumoContent"></div>
+  </div>
 
-<div id="resumo"></div>
-
-<button onclick="confirmar()">Confirmar Agendamento</button>
+  <button class="btn-confirmar" id="btnConfirmar" onclick="confirmar()" disabled>
+    Confirmar Agendamento
+  </button>
 
 </div>
 
 <!-- BOTÃO WHATSAPP -->
-<a class="whatsapp" href="https://wa.me/5519991984539" target="_blank">💬</a>
+<a class="whatsapp" href="https://wa.me/5519991984539" target="_blank" title="Fale conosco">💬</a>
 
+<!-- MODAL DE SUCESSO -->
+<div class="modal-overlay" id="modalSucesso">
+  <div class="modal-content">
+    <div class="modal-icon">✓</div>
+    <div class="modal-title">Agendamento Confirmado!</div>
+    <div class="modal-text" id="modalTexto">
+      Seu agendamento foi salvo com sucesso.<br>
+      Você será redirecionado para o WhatsApp.
+    </div>
+    <button class="modal-btn" onclick="fecharModal()">OK</button>
+  </div>
+</div>
+
+<!-- FIREBASE E LÓGICA -->
 <script type="module">
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, query, where } 
+import { getFirestore, collection, addDoc, getDocs, query, where, orderBy } 
 from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -191,109 +716,253 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-let servicos=[];
-let total=0;
-let horarioSelecionado="";
+// Variáveis globais
+let servicosSelecionados = [];
+let total = 0;
+let horarioSelecionado = "";
 
-window.toggleServico=function(el,nome,preco){
+// Configurar data mínima (amanhã)
+const amanha = new Date();
+amanha.setDate(amanha.getDate() + 1);
+document.getElementById('data').min = amanha.toISOString().split('T')[0];
+
+// Toggle serviço
+window.toggleServico = function(el, nome, preco) {
   el.classList.toggle("selected");
-
-  if(servicos.includes(nome)){
-    servicos=servicos.filter(s=>s!==nome);
-    total-=preco;
-  }else{
-    servicos.push(nome);
-    total+=preco;
+  
+  const index = servicosSelecionados.findIndex(s => s.nome === nome);
+  
+  if (index > -1) {
+    servicosSelecionados.splice(index, 1);
+    total -= preco;
+  } else {
+    servicosSelecionados.push({ nome, preco });
+    total += preco;
   }
-
+  
   atualizarResumo();
-}
+  validarFormulario();
+};
 
-function atualizarResumo(){
-  document.getElementById("resumo").innerHTML=
-  "<b>Serviços:</b><br>"+servicos.join("<br>")+"<br><br><b>Total:</b> R$ "+total;
-}
-
-window.gerarHorarios=async function(){
-  const div=document.getElementById("horarios");
-  div.innerHTML="";
-  const data=document.getElementById("data").value;
-  if(!data) return;
-
-  const horarios=["08:00","09:00","10:00","14:00","15:00","16:00","17:00","18:00"];
-
-  const q=query(collection(db,"Agendamentos"),where("data","==",data));
-  const snapshot=await getDocs(q);
-
-  let ocupados=[];
-  snapshot.forEach(doc=>{
-    ocupados.push(doc.data().horario);
-  });
-
-  horarios.forEach(h=>{
-    const card=document.createElement("div");
-    card.className="card horario";
-    card.innerText=h;
-
-    if(ocupados.includes(h)){
-      card.classList.add("ocupado");
-      card.innerText=h+" (Ocupado)";
-    }else{
-      card.onclick=function(){
-        document.querySelectorAll(".horario").forEach(c=>c.classList.remove("selected"));
-        card.classList.add("selected");
-        horarioSelecionado=h;
-      }
-    }
-
-    div.appendChild(card);
-  });
-}
-
-window.confirmar=async function(){
-
-  const nome=document.getElementById("nome").value;
-  const telefone=document.getElementById("telefone").value;
-  const veiculo=document.getElementById("veiculo").value;
-  const data=document.getElementById("data").value;
-
-  if(!nome||!telefone||!veiculo||!data||!horarioSelecionado||servicos.length==0){
-    alert("Preencha tudo corretamente");
+// Gerar horários
+window.gerarHorarios = async function() {
+  const data = document.getElementById("data").value;
+  const section = document.getElementById("horariosSection");
+  const container = document.getElementById("horarios");
+  
+  if (!data) {
+    section.style.display = "none";
     return;
   }
+  
+  // Loading state
+  container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 20px;"><div class="loading"></div></div>';
+  section.style.display = "block";
+  
+  const horarios = ["08:00", "09:00", "10:00", "11:00", "14:00", "15:00", "16:00", "17:00"];
+  
+  try {
+    const q = query(
+      collection(db, "Agendamentos"), 
+      where("data", "==", data),
+      where("status", "!=", "cancelado")
+    );
+    const snapshot = await getDocs(q);
+    
+    const ocupados = snapshot.docs.map(doc => doc.data().horario);
+    
+    container.innerHTML = "";
+    horarios.forEach(h => {
+      const card = document.createElement("div");
+      card.className = "horario-card";
+      card.textContent = h;
+      
+      if (ocupados.includes(h)) {
+        card.classList.add("ocupado");
+        card.title = "Horário ocupado";
+      } else {
+        card.onclick = () => selecionarHorario(card, h);
+      }
+      
+      container.appendChild(card);
+    });
+    
+    horarioSelecionado = "";
+    atualizarResumo();
+    validarFormulario();
+    
+  } catch (error) {
+    console.error("Erro ao buscar horários:", error);
+    container.innerHTML = '<div style="grid-column: 1/-1; color: #ff6666; text-align: center;">Erro ao carregar horários</div>';
+  }
+};
 
-  await addDoc(collection(db,"Agendamentos"),{
-    nome,
-    telefone,
-    veiculo,
-    data,
-    horario:horarioSelecionado,
-    servicos,
-    total,
-    status:"pendente",
-    criadoEm:new Date()
-  });
-
-  const numero="5519991984539";
-
-  const mensagem=`🚗 NOVO AGENDAMENTO 🚗
-
-Nome: ${nome}
-Telefone: ${telefone}
-Veículo: ${veiculo}
-
-Serviços:
-${servicos.join(", ")}
-
-Data: ${data}
-Horário: ${horarioSelecionado}
-
-Total: R$ ${total}`;
-
-  window.open(`https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`);
-
-  alert("Agendamento salvo no sistema!");
-  location.reload();
+function selecionarHorario(el, horario) {
+  document.querySelectorAll(".horario-card").forEach(c => c.classList.remove("selected"));
+  el.classList.add("selected");
+  horarioSelecionado = horario;
+  atualizarResumo();
+  validarFormulario();
 }
 
+// Máscara de telefone
+window.mascaraTelefone = function(input) {
+  let value = input.value.replace(/\D/g, "");
+  if (value.length <= 11) {
+    value = value.replace(/^(\d{2})(\d)/g, "($1) $2");
+    value = value.replace(/(\d)(\d{4})$/, "$1-$2");
+    input.value = value;
+  }
+};
+
+// Atualizar resumo visual
+window.atualizarResumo = function() {
+  const nome = document.getElementById("nome").value;
+  const data = document.getElementById("data").value;
+  const box = document.getElementById("resumoBox");
+  const content = document.getElementById("resumoContent");
+  
+  if (servicosSelecionados.length === 0 && !nome && !data) {
+    box.style.display = "none";
+    return;
+  }
+  
+  box.style.display = "block";
+  
+  let html = '';
+  
+  if (servicosSelecionados.length > 0) {
+    html += '<div class="resumo-item servicos"><span><b>Serviços:</b></span>';
+    servicosSelecionados.forEach(s => {
+      html += `<span>${s.nome} - R$${s.preco}</span>`;
+    });
+    html += '</div>';
+  }
+  
+  if (data) {
+    html += `<div class="resumo-item"><span>Data:</span><span>${new Date(data).toLocaleDateString('pt-BR')}</span></div>`;
+  }
+  
+  if (horarioSelecionado) {
+    html += `<div class="resumo-item"><span>Horário:</span><span>${horarioSelecionado}</span></div>`;
+  }
+  
+  if (nome) {
+    html += `<div class="resumo-item"><span>Cliente:</span><span>${nome}</span></div>`;
+  }
+  
+  if (total > 0) {
+    html += `<div class="resumo-total"><span>Total:</span><span>R$ ${total}</span></div>`;
+  }
+  
+  content.innerHTML = html;
+};
+
+// Validar formulário
+function validarFormulario() {
+  const nome = document.getElementById("nome").value.trim();
+  const telefone = document.getElementById("telefone").value.trim();
+  const veiculo = document.getElementById("veiculo").value.trim();
+  const data = document.getElementById("data").value;
+  
+  const isValid = nome && telefone.length >= 14 && veiculo && data && horarioSelecionado && servicosSelecionados.length > 0;
+  
+  const btn = document.getElementById("btnConfirmar");
+  btn.disabled = !isValid;
+  
+  if (isValid) {
+    btn.innerHTML = 'Confirmar Agendamento <span style="font-size: 0.9rem;">→</span>';
+  } else {
+    btn.innerHTML = 'Preencha todos os dados';
+  }
+}
+
+// Confirmar agendamento
+window.confirmar = async function() {
+  const btn = document.getElementById("btnConfirmar");
+  const originalText = btn.innerHTML;
+  
+  btn.disabled = true;
+  btn.innerHTML = '<span class="loading"></span> Processando...';
+  
+  const nome = document.getElementById("nome").value.trim();
+  const telefone = document.getElementById("telefone").value.trim();
+  const veiculo = document.getElementById("veiculo").value.trim();
+  const data = document.getElementById("data").value;
+  
+  try {
+    // Salvar no Firebase
+    await addDoc(collection(db, "Agendamentos"), {
+      nome,
+      telefone,
+      veiculo,
+      data,
+      horario: horarioSelecionado,
+      servicos: servicosSelecionados.map(s => s.nome),
+      total,
+      status: "pendente",
+      criadoEm: new Date(),
+      atualizadoEm: new Date()
+    });
+    
+    // Montar mensagem WhatsApp
+    const numero = "5519991984539";
+    const mensagem = `🚗 *NOVO AGENDAMENTO - VMUKA-CAR*
+
+*Cliente:* ${nome}
+*Telefone:* ${telefone}
+*Veículo:* ${veiculo}
+
+*Serviços:*
+${servicosSelecionados.map(s => `• ${s.nome} - R$${s.preco}`).join('\n')}
+
+*Data:* ${new Date(data).toLocaleDateString('pt-BR')}
+*Horário:* ${horarioSelecionado}
+
+*Total:* R$ ${total}
+
+---
+Aguardo confirmação! ✅`;
+    
+    // Abrir WhatsApp
+    window.open(`https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`, '_blank');
+    
+    // Mostrar modal
+    document.getElementById("modalTexto").innerHTML = `
+      <strong>Olá ${nome}!</strong><br><br>
+      Seu agendamento para <strong>${new Date(data).toLocaleDateString('pt-BR')}</strong> às <strong>${horarioSelecionado}</strong> foi confirmado.<br><br>
+      Total: <strong>R$ ${total}</strong>
+    `;
+    document.getElementById("modalSucesso").classList.add("active");
+    
+  } catch (error) {
+    console.error("Erro ao salvar:", error);
+    alert("Erro ao salvar agendamento. Tente novamente.");
+    btn.disabled = false;
+    btn.innerHTML = originalText;
+  }
+};
+
+window.fecharModal = function() {
+  document.getElementById("modalSucesso").classList.remove("active");
+  location.reload();
+};
+
+// Admin toggle (simples)
+window.toggleAdmin = function() {
+  const senha = prompt("Digite a senha de administrador:");
+  if (senha === "vmuka2024") {
+    window.open("admin.html", "_blank");
+  } else if (senha !== null) {
+    alert("Senha incorreta!");
+  }
+};
+
+// Listeners para validação em tempo real
+['nome', 'telefone', 'veiculo'].forEach(id => {
+  document.getElementById(id).addEventListener('input', validarFormulario);
+});
 </script>
+
+</body>
+</html>
